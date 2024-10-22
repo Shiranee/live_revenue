@@ -13,5 +13,5 @@ Route::get('/dashboard', function () {
     return response()->file(public_path('dark/index.html'));
 });
 
-Route::get('api/revenue/{startDate}/{endDate}/{operation}', [OrderController::class, 'getOrderSummary']);
+Route::get('api/revenue/{startDate}&{endDate}/{operation}', [OrderController::class, 'getOrderSummary']);
 
