@@ -15,3 +15,6 @@ Route::get('/dashboard', function () {
 
 Route::get('api/revenue/{startDate}&{endDate}/{operation}', [OrderController::class, 'getOrderSummary']);
 
+Route::get('/main', function () {
+    return response()->file(public_path('dashboards/revenue_ecomm/index.php'));
+});

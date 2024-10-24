@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    height: 30px;
+}
+
+.card {
+    height: 150px; /* Set your desired height */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    width: 98%;
+    margin: 0 auto; /* Centers the body */
+    background-color: #f7f7f7;
+}

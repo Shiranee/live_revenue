@@ -32,14 +32,14 @@ class OrderController extends Controller
                 case 'summaryStatus':
                     $results = DB::table('orders')
                         ->selectRaw('
-                            order_status,
+                            CASE WHEN order_status <> \'Pending\' THEN \'Pago\' ELSE \'Aguardando Pagamento\' END AS status, 
                             COUNT(id) as total_orders,
                             COUNT(DISTINCT customer_id) as unique_customers,
                             SUM(amount) as total_amount,
                             SUM(price_paid) as total_revenue
                         ')
                         ->whereBetween('order_date', [$start_date, $end_date])
-                        ->groupBy('order_status')
+                        ->groupBy('status')
                         ->get();
                     break;
 
