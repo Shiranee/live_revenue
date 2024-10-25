@@ -5,18 +5,51 @@
     font-family: Arial, sans-serif;
 }
 
-.header {
-    height: 30px;
-}
-
-.card {
-    height: 150px; /* Set your desired height */
-}
 
 body {
     display: flex;
     flex-direction: column;
-    width: 98%;
-    margin: 0 auto; /* Centers the body */
+    width: 100vw;
+    margin: 0 auto;
     background-color: #f7f7f7;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    height: 55px;
+    border-bottom: 0.1px solid rgb(202, 202, 202);
+    padding: 0 15px;
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: #e6d6c9;
+}
+
+.m-shadow {
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
+}
+
+.fs-custom {
+    font-size: 0.9rem; /* Adjust this value as needed */
+}
+
+.center {
+    width: 96%;
+    align-self: center;
+}
+
+.round-pill {
+    border-radius: 30rem !important;
+    background-color: rgb(211, 224, 199);
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 3px 10px; /* Adjust padding to provide enough space */
+    line-height: normal; /* Use normal line-height to avoid cutting off */
+    font-size: 1rem; /* Adjust font size as needed */
+    border: 1px solid rgb(63, 87, 43);
+    font-weight: bold;
+}
+
+.revenue-dashboard {
+    height: 130px;
 }

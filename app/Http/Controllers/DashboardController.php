@@ -11,6 +11,6 @@ class DashboardController extends Controller
 {
     public function showRevenueEcomm()
     {
-        return view('dashboards.revenue_ecomm.index');  // Assuming you have a Blade template
+        return view('dashboard.blade.php');  // Assuming you have a Blade template
     }
 }

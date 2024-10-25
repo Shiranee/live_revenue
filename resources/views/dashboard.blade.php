@@ -1,64 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.1/bootstrap-daterangepicker.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.1/bootstrap-daterangepicker.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>LIVE! Receita E-commerce</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+	<link href="styles.css" rel="stylesheet">
+  <script src="script.js" type="module" defer></script>
+  <script src="echartOptions.js" type="module" defer></script>
 </head>
+
 <body>
-    <div class="container">
-        <header>
-            <h1>Dashboard</h1>
-        </header>
+  
+  <header class="header m-shadow"></header>
 
-        <!-- Date Range Picker -->
-        <div class="row mt-3">
-            <div class="col-md-4">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="dateRangePicker" placeholder="Select date range">
-                    <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+  <div class="row center">
+
+      <div class="col">
+          <div class="card mb-3 m-shadow">
+              <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center p-1 mx-4">
+                  
+                  <div >
+                    <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">Receita Hoje
+                      <span class="round-pill">-6.8%</span>
+                    </h5>
+                    <h6 class="text-body-tertiary">Captado</h6>
+                  </div>
+                  
+                  <h2 class="card-title fw-bold">R$16.247</h2>
+
                 </div>
-            </div>
-        </div>
-    </div>
 
-<form action="{{ route('/dashboard') }}" method="GET">
-    <div class="row mt-3">
-        <div class="col-md-4">
-            <div class="input-group">
-                <input type="text" class="form-control" name="date_range" id="dateRangePicker" placeholder="Select date range">
-                <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-    </div>
-</form>
+                <div class="revenue-dashboard" id='revenue-hour'>
+                  
+                </div>
 
-    
-    <script>
-        $(function() {
-            $('#dateRangePicker').daterangepicker({
-                opens: 'left',
-                autoUpdateInput: false,
-                locale: {
-                    cancelLabel: 'Clear'
-                }
-            });
+                  <div class="container text-center mb-2 fs-custom">
+                    <div class="row">
+                      <table class="table mt-1">
+                        <thead class="thead-light">
+                          <tr>
+                            <th>Clientes</th>
+                            <th>Pedidos</th>
+                            <th>Peças</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>10.000</td>
+                            <td>10.000</td>
+                            <td>10.000</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
 
-            $('#dateRangePicker').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
-            });
+                  <div class="d-flex justify-content-evenly align-items-center">
+                      <div class="d-flex justify-content-evenly align-items-center">
+                        <h6 class="round-pill"></h6>
+                        <h6 class="card-title fw-bold fs-custom">Pagamentos Confirmados:</h6>
+                        <h6 class="text-body fs-custom" id='payments-confimed'>Loading...</h6>
+                      </div>
 
-            $('#dateRangePicker').on('cancel.daterangepicker', function(ev, picker) {
-                $(this).val('');
-            });
-        });
-    </script>
+                      <div class="d-flex justify-content-evenly align-items-center">
+                        <h6 class="round-pill"></h6>
+                        <h6 class="card-title fw-bold fs-custom">Pagamentos Confirmados:</h6>
+                        <h6 class="text-body fs-custom" id='payments-pending'>Loading...</h6>
+                      </div>
+
+                  </div>
+
+              </div>
+          </div>
+      </div>
+
+      <div class="col">
+          <div class="card mb-3 m-shadow">
+              <div class="card-body">
+                  <h5 class="card-title fw-bold">Receita Acumulada</h5>
+              </div>
+          </div>
+      </div>
+
+      <div class="col">
+          <div class="card mb-3 m-shadow">
+              <div class="card-body">
+                  <h5 class="card-title fw-bold">Receita Faturada</h5>
+              </div>
+          </div>
+      </div>
+
+  </div>
+
+  <div class="row center">
+
+      <div class="col">
+          <div class="card mb-3 m-shadow">
+              <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center p-1 mx-4">
+                  
+                  <div >
+                    <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">Devoluções Hoje
+                      <span class="round-pill">-6.8%</span>
+                    </h5>
+                  </div>
+                  
+                  <h2 class="card-title fw-bold">R$16.247</h2>
+
+                </div>
+
+              </div>
+          </div>
+      </div>
+
+
+      <div class="col">
+          <div class="card mb-3 m-shadow">
+              <div class="card-body">
+
+                <!-- <div class="d-flex justify-content-between align-items-center p-1 mx-4">
+                  
+                  <div >
+                    <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">Devoluções Acumuladas
+                      <span class="round-pill">-6.8%</span>
+                    </h5>
+                  </div>
+                  
+                  <h2 class="card-title fw-bold">R$16.247</h2>
+
+                </div> -->
+
+              </div>
+          </div>
+      </div>
+
+
+      <div class="col">
+          <div class="card mb-3 m-shadow">
+              <div class="card-body">
+
+                <!-- <div class="d-flex justify-content-between align-items-center p-1 mx-4">
+                  
+                  <div >
+                    <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">Devoluções Faturadas
+                      <span class="round-pill">-6.8%</span>
+                    </h5>
+                  </div>
+                  
+                  <h2 class="card-title fw-bold">R$16.247</h2>
+
+                </div> -->
+
+              </div>
+          </div>
+      </div>
+
+  </div>
+
 </body>
+
 </html>
