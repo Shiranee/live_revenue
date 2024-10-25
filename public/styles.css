@@ -30,7 +30,7 @@ body {
 }
 
 .fs-custom {
-    font-size: 0.9rem; /* Adjust this value as needed */
+    font-size: 0.8rem !important;
 }
 
 .center {

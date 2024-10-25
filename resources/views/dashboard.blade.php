@@ -71,7 +71,7 @@
 
                       <div class="d-flex justify-content-evenly align-items-center">
                         <h6 class="round-pill"></h6>
-                        <h6 class="card-title fw-bold fs-custom">Pagamentos Confirmados:</h6>
+                        <h6 class="card-title fw-bold fs-custom">Pagamentos Pendentes:</h6>
                         <h6 class="text-body fs-custom" id='payments-pending'>Loading...</h6>
                       </div>
 
@@ -102,18 +102,18 @@
   <div class="row center">
 
       <div class="col">
-          <div class="card mb-3 m-shadow">
+          <div class="card mb-2 m-shadow">
               <div class="card-body">
 
-                <div class="d-flex justify-content-between align-items-center p-1 mx-4">
+                <div class="d-flex justify-content-between align-items-center mx-4">
                   
                   <div >
-                    <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">Devoluções Hoje
-                      <span class="round-pill">-6.8%</span>
-                    </h5>
+                    <h6 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">Devoluções Hoje
+                      <span class="round-pill fs-custom">-6.8%</span>
+                    </h6>
                   </div>
                   
-                  <h2 class="card-title fw-bold">R$16.247</h2>
+                  <h3 class="card-title fw-bold">R$16.247</h3>
 
                 </div>
 
@@ -126,18 +126,6 @@
           <div class="card mb-3 m-shadow">
               <div class="card-body">
 
-                <!-- <div class="d-flex justify-content-between align-items-center p-1 mx-4">
-                  
-                  <div >
-                    <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">Devoluções Acumuladas
-                      <span class="round-pill">-6.8%</span>
-                    </h5>
-                  </div>
-                  
-                  <h2 class="card-title fw-bold">R$16.247</h2>
-
-                </div> -->
-
               </div>
           </div>
       </div>
@@ -146,18 +134,6 @@
       <div class="col">
           <div class="card mb-3 m-shadow">
               <div class="card-body">
-
-                <!-- <div class="d-flex justify-content-between align-items-center p-1 mx-4">
-                  
-                  <div >
-                    <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">Devoluções Faturadas
-                      <span class="round-pill">-6.8%</span>
-                    </h5>
-                  </div>
-                  
-                  <h2 class="card-title fw-bold">R$16.247</h2>
-
-                </div> -->
 
               </div>
           </div>
