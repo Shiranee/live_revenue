@@ -9,16 +9,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::get('/dashboard', function () {
-//     return response()->file(public_path('dark/index.html'));
-// });
-
-Route::get('api/revenue/{startDate}&{endDate}/{operation}', [OrderController::class, 'getOrderSummary']);
-
-// Route::get('/main', function () {
-//     return response()->file(public_path('dashboards/revenue_ecomm/index.php'));
-// });
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
+
+Route::get('api/revenue/{startDate}/{endDate}/{operation}/{group}', [OrderController::class, 'getOrderSummary']);

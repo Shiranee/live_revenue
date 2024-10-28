@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    public function getOrderSummary($start_date, $end_date, $operation)
+    public function getOrderSummary($start_date, $end_date, $operation, $group)
     {
         try {
             // Validate date format (YYYY-MM-DD)
@@ -28,8 +28,13 @@ class OrderController extends Controller
                         ->whereBetween('order_date', [$start_date, $end_date])
                         ->first();
                     break;
+                default:
+                    return response()->json(['error' => 'Invalid operation'], 400);
+            }
 
-                case 'summaryStatus':
+            // Switch case to handle different grouping
+            switch ($group) {
+                case 'status':
                     $results = DB::table('orders')
                         ->selectRaw('
                             CASE WHEN order_status <> \'Pending\' THEN \'Pago\' ELSE \'Aguardando Pagamento\' END AS status, 
@@ -43,7 +48,7 @@ class OrderController extends Controller
                         ->get();
                     break;
 
-                case 'summaryInvoiced':
+                case 'invoiced':
                     $results = DB::table('orders')
                         ->selectRaw('
                             invoiced,
@@ -57,7 +62,7 @@ class OrderController extends Controller
                         ->get();
                     break;
 
-                case 'summaryToday':
+                case 'today':
                     $results = DB::table('orders')
                         ->selectRaw('
                             date_trunc(\'hour\', order_time) AS hour,
@@ -66,13 +71,13 @@ class OrderController extends Controller
                             SUM(amount) as total_amount,
                             SUM(price_paid) as total_revenue
                         ')
-                        ->where('order_date', [$end_date])
+                        ->whereDate('order_date', $end_date) // Corrected
                         ->groupBy('hour')
                         ->orderBy('hour', 'desc')
                         ->get();
                     break;
 
-                case 'summaryPeriod':
+                case 'period':
                     $results = DB::table('orders')
                         ->selectRaw('
                             order_date,
@@ -88,7 +93,12 @@ class OrderController extends Controller
                     break;
 
                 default:
-                    return response()->json(['error' => 'Invalid operation'], 400);
+                    return response()->json(['error' => 'Invalid group option'], 400);
+            }
+
+            // Check if results are empty
+            if (empty($results)) {
+                return response()->json(['message' => 'No results found.'], 204);
             }
 
             // Return results as JSON response
@@ -111,6 +121,12 @@ class OrderController extends Controller
 
         if ($startDateTime > $endDateTime) {
             throw new \Exception('Start date must be before or equal to end date.');
+        }
+
+        // Optional: Check if dates are not in the future
+        $currentDate = new \DateTime();
+        if ($startDateTime > $currentDate || $endDateTime > $currentDate) {
+            throw new \Exception('Dates must not be in the future.');
         }
     }
 }

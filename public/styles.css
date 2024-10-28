@@ -33,6 +33,10 @@ body {
     font-size: 0.8rem !important;
 }
 
+.fs-custom-1 {
+    font-size: 0.75rem !important;
+}
+
 .center {
     width: 96%;
     align-self: center;
