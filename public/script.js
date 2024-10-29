@@ -23,6 +23,10 @@ async function fetchData(url) {
   }
 }
 
+(async () => {
+  const data = await fetchData("http://192.168.100.95:8000/api/revenue/2024-09-01/2024-09-30/summary");
+  console.log(data);
+})();
 // async function startCard(params) {
 //   let data = await fetchData(apiInvoices);
 //   if (data && data.length > 0) {
