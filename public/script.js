@@ -23,20 +23,20 @@ async function fetchData(url) {
   }
 }
 
-async function startCard(params) {
-  let data = await fetchData(apiInvoices);
-  if (data && data.length > 0) {
-    let value = data[0].revenue;
-    document.getElementById(params.id).innerHTML = value;
-  } else {
-    console.warn('No data available to display');
-  }
-}
-let params = {
-  id: 'payments-confirmed'
-};
+// async function startCard(params) {
+//   let data = await fetchData(apiInvoices);
+//   if (data && data.length > 0) {
+//     let value = data[0].revenue;
+//     document.getElementById(params.id).innerHTML = value;
+//   } else {
+//     console.warn('No data available to display');
+//   }
+// }
+// let params = {
+//   id: 'payments-confirmed'
+// };
 
-startCard(params);
+// startCard(params);
 
 let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

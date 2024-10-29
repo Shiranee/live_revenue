@@ -16,35 +16,27 @@
 </head>
 
 <body>
-  
   <header class="header m-shadow">
-    
   </header>
-    
-  <!-- resources/views/components/dashboard.blade.php -->
-  @include('components.navbar')
 
   <div class="row center">
+  @include('components.cardRevenue', [
+            'titleFirst' => $titleFirst,
+            'tooltip' => $tooltip,
+            'comparison' => $comparison,
+            'titleSecond' => $titleSecond,
+            'revenue' => $revenue,
+            'graphId' => $graphId,
+            'customers' => $customers,
+            'orders' => $orders,
+            'amount' => $amount,
+            'subtitleMain' => $subtitleMain,
+            'subtitleFirst' => $subtitleFirst,
+            'subtitleSecond' => $subtitleSecond,
+            'valueFirst' => $valueFirst,
+            'valueSecond' => $valueSecond
+        ])
 
-    @include('components.cardRevenue')
-    @include('components.cardRevenue')
-    @include('components.cardRevenue')
-
-      <!-- <div class="col">
-          <div class="card mb-3 m-shadow">
-              <div class="card-body">
-                  <h5 class="card-title fw-bold">Receita Acumulada</h5>
-              </div>
-          </div>
-      </div>
-
-      <div class="col">
-          <div class="card mb-3 m-shadow">
-              <div class="card-body">
-                  <h5 class="card-title fw-bold">Receita Faturada</h5>
-              </div>
-          </div>
-      </div> -->
 
   </div>
 
