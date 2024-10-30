@@ -7,7 +7,7 @@ function startChart(chartId, option) {
   chart.setOption(option);
 }
 
-startChart(charts[0], echartOptions.optionLine);
+// startChart(charts[0], echartOptions.optionLine);
 
 async function fetchData(url) {
   try {
