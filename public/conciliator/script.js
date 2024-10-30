@@ -15,6 +15,18 @@ function testDate(date) {
   return (/^\d{4}-\d{2}$/.test(date)) ? date.replace(/-/g, '/') : new Date(date).toLocaleDateString('en-GB')
 }
 
+function formatRevenue(params) {
+  const roundedValue = Math.round(params);  // Round the number
+  const formattedValue = roundedValue.toLocaleString('pt-BR');  // Format with thousand separator
+  return `R$ ${formattedValue}`;  // Display currency
+}
+
+function formatNum(params) {
+  const roundedValue = Math.round(params);  // Round the number
+  const formattedValue = roundedValue.toLocaleString('pt-BR');  // Format with thousand separator
+  return formattedValue;  // Display currency
+}
+
 function startChart(chartInstance, option) {
   // let chart = echarts.init(document.getElementById(chart))
   chartInstance.setOption(option); // Set the option on the ECharts instance
@@ -47,24 +59,6 @@ function setDynamicOptions(chartInstance, graphOption, fontSize = 3) {
 
   chartInstance.setOption(graphOption); // Reapply the updated option
 }
-
-let divergencesDay = [
-  {
-    name: 'Positiva',
-    type: 'bar',
-    data: [-120.25, 100.30, 47.00, -148.78, -659.77, -184.74, -665.09, -544.14, -38.93, 369.38, -865.77, 93.08, 35.81, -131.85, 226.45, -822.76, -944.53, -394.44, 184.08, -1817.77, -674.20, -437.97, -286.98, 33.59, -145, -964.55, -684.14, -166.46, 145.25, 0],
-    itemStyle: {
-      color: 'green' // Set the color to green
-    },
-    label: {
-      show: true, // Shows labels on top
-      position: 'top',
-      formatter: function (params) {
-        return 'R$' + params.value.toFixed(0); // Format with currency sign and two decimal places
-      }
-    }
-  }
-]
 
 // Set the option for the chart
 // Set the base option for the chart
@@ -213,8 +207,10 @@ let optionLines = {
     trigger: 'axis',
     formatter: function (params) {
       let tooltipContent = `${params[0].axisValue}<br/>`; // Display the x-axis date (or category value)
+      
       params.forEach(item => {
-        tooltipContent += `${item.marker} ${item.seriesName}: R$${item.value.toFixed(0)}<br/>`; // Format with currency sign and zero decimal places
+        const formattedValue = formatRevenue(item.value);  // Use formatRevenue to format the value
+        tooltipContent += `${item.marker} ${item.seriesName}: ${formattedValue}<br/>`; // Use formatted value with currency symbol
       });
       return tooltipContent;
     }
@@ -326,7 +322,22 @@ async function initLinesChart() {
         },
         symbolSize: 3.5,
         symbol: "circle",
-          data: revenuePaid.map(item => item.value) // Provide the chart with values
+          data: revenuePaid.map(item => item.value), // Provide the chart with values
+        label: {
+          show: true,
+          position: 'outside',
+          verticalAlign: 'middle',
+          color: 'black',
+          fontSize: 12,
+          fontWeight: 'bold',
+          backgroundColor: 'rgba(241, 237, 241, 0.7)',  // Transparent background for the label
+          borderColor: 'grey',
+          borderRadius: 10,
+          padding: 5,
+          formatter: function(params) {
+            return formatRevenue(params.value);  // Use the formatRevenue function to format the label value
+          }
+        },
         },
         {
           name: 'Faturado',
@@ -377,7 +388,22 @@ async function initDivergencesLineChart() {
           width: 2.5
         },
         symbolSize: 3.5,
-        symbol: "circle"
+        symbol: "circle",
+        label: {
+          show: true,
+          position: 'outside',
+          verticalAlign: 'middle',
+          color: 'black',
+          fontSize: 12,
+          fontWeight: 'bold',
+          backgroundColor: 'rgba(241, 237, 241, 0.7)',  // Transparent background for the label
+          borderColor: 'grey',
+          borderRadius: 10,
+          padding: 5,
+          formatter: function(params) {
+            return formatRevenue(params.value);  // Use the formatRevenue function to format the label value
+          }
+        },
       };
     });
 
@@ -404,8 +430,6 @@ async function initDivergencesLineChart() {
 
 initDivergencesLineChart();
 startChart(divergencesBar, optionLines);
-
-
 
 setDynamicOptions(chartDivergences, optionDonut);
 setDynamicOptions(invoiceMeter, optionMeter, 4.5);
@@ -530,8 +554,6 @@ function resizeCharts() {
 // Add event listener for window resize and adjust for zoom
 window.addEventListener('resize', resizeCharts);
 window.addEventListener('load', resizeCharts); // To resize charts on initial load
-
-
 
 // function optionBar(xAxisData, seriesData) {
 //   let option = {
