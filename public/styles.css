@@ -54,6 +54,10 @@ body {
     font-weight: bold;
 }
 
+.pending {
+    background-color: rgb(247, 221, 139);
+}
+
 .revenue-dashboard {
     height: 130px;
 }

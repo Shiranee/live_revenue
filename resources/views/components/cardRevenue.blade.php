@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="d-flex justify-content-evenly">
-                  <h6 class="round-pill"></h6>
+                  <h6 class="round-pill pending"></h6>
                   <h6 class="card-title fw-bold fs-custom"> {{ $subtitleSecond }} <!-- Pendentes: --> </h6>
                   <h6 class="text-body fs-custom" id='payments-pending'> {{ $valueSecond }} </h6>
                 </div>

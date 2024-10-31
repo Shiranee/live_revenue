@@ -21,22 +21,11 @@
   </header>
 
   <div class="row center">
-  @include('components.cardRevenue', [
-            'titleFirst' => $titleFirst,
-            'tooltip' => $tooltip,
-            'comparison' => $comparison,
-            'titleSecond' => $titleSecond,
-            'revenue' => $revenue,
-            'graphId' => $graphId,
-            'customers' => $customers,
-            'orders' => $orders,
-            'amount' => $amount,
-            'subtitleMain' => $subtitleMain,
-            'subtitleFirst' => $subtitleFirst,
-            'subtitleSecond' => $subtitleSecond,
-            'valueFirst' => $valueFirst,
-            'valueSecond' => $valueSecond
-        ])
+    @foreach($cards as $cardData)
+        @include('components.cardRevenue', $cardData)
+    @endforeach
+  </div>
+
 
 
   </div>
