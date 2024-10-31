@@ -21,7 +21,7 @@ class DashboardController extends Controller
     $end_date = '2024-09-30';
     $cards = [];
     $cardsOperations = ['today', 'summary', 'invoiced'];
-    $cardsRevenueTitles = ['Hoje', 'Captada', 'Faturada'];
+    $cardsRevenueTitles = ['Hoje', 'Acumulada', 'Faturada'];
 
     foreach ($cardsOperations as $index => $operation) {        
         // Initialize confirmed and pending payments for each operation
