@@ -111,6 +111,36 @@ return [
             // 'encrypt' => env('DB_ENCRYPT', 'yes'),
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
+        
+        'necomm' => [
+            'driver' => 'pgsql',
+            'url' => env('NECOMM_URL'),
+            'host' => env('NECOMM_HOST', '127.0.0.1'),
+            'port' => env('NECOMM_PORT', '5432'),
+            'database' => env('NECOMM_DATABASE', 'laravel'),
+            'username' => env('NECOMM_USERNAME', 'root'),
+            'password' => env('NECOMM_PASSWORD', ''),
+            'charset' => env('NECOMM_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
+        'ocomm' => [
+            'driver' => 'mysql',
+            'url' => env('OCOMM_URL'),
+            'host' => env('OCOMM_HOST', '127.0.0.1'),
+            'port' => env('OCOMM_PORT', '5432'),
+            'database' => env('OCOMM_DATABASE', 'laravel'),
+            'username' => env('OCOMM_USERNAME', 'root'),
+            'password' => env('OCOMM_PASSWORD', ''),
+            'charset' => env('OCOMM_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
 
     ],
 

@@ -75,3 +75,53 @@ export const optionLine = {
     }
   ]
 };
+
+export const optionDonut = {
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    bottom: '5%',
+    left: 'center',
+    textStyle: {
+      fontSize: '2vw' // Default base font size
+    }
+  },
+  series: [
+    {
+      type: 'pie',
+      radius: ['40%', '60%'],
+      center: ['50%', '45%'],
+      avoidLabelOverlap: false,
+      label: {
+        show: true,
+        position: 'outside',
+        verticalAlign: 'middle',
+        backgroundColor: 'rgba(241, 237, 241, 0.7)', // Add transparency
+        borderColor: 'grey',
+        // borderWidth: 1,
+        borderRadius: 10,
+        padding: 5,
+        formatter: '{b}: {c}',
+        fontSize: '2vw', // Responsive font size
+        color: 'black',
+        fontWeight: 'bold'
+      },
+      itemStyle: {
+        borderRadius: 4,
+        borderColor: '#fff',
+        borderWidth: 1
+      },
+      labelLine: {
+        show: true
+      },
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' }
+      ]
+    }
+  ]
+};
