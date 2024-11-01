@@ -37,6 +37,10 @@ body {
     font-size: 0.75rem !important;
 }
 
+.h-49 {
+    height: 49%;
+}
+
 .center {
     width: 96%;
     align-self: center;
@@ -60,4 +64,5 @@ body {
 
 .revenue-dashboard {
     height: 130px;
+    width: 96%;
 }

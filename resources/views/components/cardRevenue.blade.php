@@ -37,8 +37,8 @@
               }]
 
               const chartOptions = echartOptions.optionLine('{{ $titleFirst }}', seriesData);
-              const gaugeOptions = echartOptions.optionGauge('{{ $titleFirst }}', gaugeData);
-              // const gaugeOptions = echartOptions.optionBarGauge();
+              // const gaugeOptions = echartOptions.optionGauge('{{ $titleFirst }}', gaugeData);
+              const gaugeOptions = echartOptions.optionBarGauge('{{ $titleFirst }}');
 
               if ('{{ $graphId }}' != 'chart-revenue-invoiced') {
                 startChart('{{ $graphId }}', chartOptions);
