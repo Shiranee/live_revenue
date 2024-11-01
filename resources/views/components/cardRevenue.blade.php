@@ -3,7 +3,7 @@
     <div class="card mb-3 m-shadow">
         <div class="card-body">
 
-          <div class="d-flex justify-content-between align-items-center p-1 mx-4">
+          <div class="d-flex justify-content-between align-items-center p-1 mx-1">
             
             <div>
               <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1"> {{ $titleFirst }} <!-- Receita Hoje -->
@@ -16,9 +16,38 @@
 
           </div>
 
-          <div class="revenue-dashboard" id='{{ $graphId }}'>
-            
-          </div>
+          <div class="revenue-dashboard" id="{{ $graphId }}"></div>
+          <script type="module">
+              import * as echartOptions from "{{ asset('echartOptions.js') }}";
+              
+              // Declare seriesData correctly
+              const seriesData = [{
+                      name: 'Your Series Name',
+                      data: [150, 230, 224, 218, 135, 147, 260],
+                      ...echartOptions.optionLinesLabels
+                  }
+              ];
+
+              const gaugeData = [{
+                value: 90,
+                name: 'Faturado',
+                itemStyle: {
+                  color: 'rgb(211, 224, 199)'
+                }
+              }]
+
+              const chartOptions = echartOptions.optionLine('{{ $titleFirst }}', seriesData);
+              const gaugeOptions = echartOptions.optionGauge('{{ $titleFirst }}', gaugeData);
+              // const gaugeOptions = echartOptions.optionBarGauge();
+
+              if ('{{ $graphId }}' != 'chart-revenue-invoiced') {
+                startChart('{{ $graphId }}', chartOptions);
+              } else {
+                startChart('{{ $graphId }}', gaugeOptions);
+              }
+          </script>
+
+
 
             <div class="container text-center fs-custom">
               <div class="row">
@@ -41,7 +70,7 @@
               </div>
             </div>
 
-            <div class="text-left p-1 mx-4">
+            <div class="text-left p-1 mx-1">
               <h6 class="card-title fw-bold fs-6"> {{ $subtitleMain }} <!-- Pagamentos: --> </h6>
             </div>
 

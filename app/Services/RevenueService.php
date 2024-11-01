@@ -35,11 +35,18 @@ class RevenueService
             case 'status':
                 return DB::table('orders')
                     ->selectRaw('
-                        CASE WHEN order_status <> \'Pending\' THEN \'Pago\' ELSE \'Aguardando Pagamento\' END AS status,
-                        COUNT(id) as orders,
-                        COUNT(DISTINCT customer_id) as customers,
-                        SUM(amount) as amount,
-                        SUM(price_paid) as revenue
+                        CASE WHEN order_status <> \'Pending\' THEN TRUE ELSE FALSE END AS status,
+                        COUNT(id) as orders
+                    ')
+                    ->whereBetween('order_date', [$start_date, $end_date])
+                    ->groupBy('status')
+                    ->get();
+            
+            case 'statusInvoiced':
+                return DB::table('orders') // Add return here
+                    ->selectRaw('
+                        invoiced AS status,
+                        COUNT(id) as orders
                     ')
                     ->whereBetween('order_date', [$start_date, $end_date])
                     ->groupBy('status')

@@ -2,16 +2,16 @@ import * as echartOptions from './echartOptions.js';
 
 let charts = ['chart-revenue-today', 'chart-divergences'];
 
-function startChart(chartId, option) {
+window.startChart = function(chartId, option) {
   let chartElement = document.getElementById(chartId);
-  if (chartElement) { // Only initialize if element exists
+  if (chartElement) {
       let chart = echarts.init(chartElement);
       chart.setOption(option);
   }
-}
+};
 
-startChart(charts[0], echartOptions.optionLine);
-startChart(charts[1], echartOptions.optionDonut);
+// startChart(charts[0], echartOptions.optionLine);
+// startChart(charts[1], echartOptions.optionDonut);
 
 let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

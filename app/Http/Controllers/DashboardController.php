@@ -25,8 +25,8 @@ class DashboardController extends Controller
 
         foreach ($cardsOperations as $index => $operation) {        
             // Initialize confirmed and pending payments for each operation
-            $confirmedPayments = 0;
-            $pendingPayments = 0;
+            $confirmed = 0;
+            $pending = 0;
 
             // Fetch order summaries based on the operation type
             if ($operation === 'today') {
@@ -34,7 +34,7 @@ class DashboardController extends Controller
                 $responseSub = $this->orderService->getOrderSummary($end_date, $end_date, 'status');
             } elseif ($operation === 'invoiced') {
                 $response = $this->orderService->getOrderSummary($start_date, $end_date, 'summary', true);
-                $responseSub = $this->orderService->getOrderSummary($start_date, $end_date, 'status');
+                $responseSub = $this->orderService->getOrderSummary($start_date, $end_date, 'statusInvoiced');
             } else {
                 $response = $this->orderService->getOrderSummary($start_date, $end_date, $operation);
                 $responseSub = $this->orderService->getOrderSummary($start_date, $end_date, 'status');
@@ -51,10 +51,10 @@ class DashboardController extends Controller
         
             // Iterate through the status data to calculate confirmed and pending amounts
             foreach ($responseSub as $status) {
-                if ($status->status === 'Pago') {
-                    $confirmedPayments += $status->amount; // Sum amounts for 'Pago'
+                if ($status->status === true) {
+                    $confirmed += $status->orders; // Sum orderss for 'Pago'
                 } else {
-                    $pendingPayments += $status->amount; // Sum amounts for 'Aguardando Pagamento'
+                    $pending += $status->orders; // Sum amounts for 'Aguardando Pagamento'
                 }
             }
         
@@ -72,8 +72,8 @@ class DashboardController extends Controller
                 'subtitleMain' => 'Pagamentos',
                 'subtitleFirst' => 'Confirmados:',
                 'subtitleSecond' => 'Pendentes:',
-                'valueFirst' => $confirmedPayments, // Amount for confirmed payments
-                'valueSecond' => $pendingPayments, // Amount for pending payments
+                'valueFirst' => $confirmed, // Amount for confirmed payments
+                'valueSecond' => $pending, // Amount for pending payments
             ];
         }
 
