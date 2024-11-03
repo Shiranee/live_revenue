@@ -7,12 +7,12 @@
             
             <div>
               <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1"> {{ $titleFirst }} <!-- Receita Hoje -->
-              <span class="round-pill" data-bs-toggle="tooltip" title="{{ $tooltip }}"> {{ $comparison }} <!-- -6.8% --> </span>
+              <span class="round-pill fs-c1" data-bs-toggle="tooltip" title="{{ $tooltip }}"> {{ $comparison }} <!-- -6.8% --> </span>
               </h5>
               <h6 class="text-body-tertiary"> {{ $titleSecond }} <!-- Captado --> </h6>
             </div>
             
-            <h2 class="card-title fw-bold"> {{ $revenue }} </h2>
+            <h2 class="card-title fw-bold fs-t1"> {{ $revenue }} </h2>
 
           </div>
 
@@ -38,7 +38,7 @@
 
               const chartOptions = echartOptions.optionLine('{{ $titleFirst }}', seriesData);
               // const gaugeOptions = echartOptions.optionGauge('{{ $titleFirst }}', gaugeData);
-              const gaugeOptions = echartOptions.optionBarGauge('{{ $titleFirst }}');
+              const gaugeOptions = echartOptions.optionBarGauge('{{ $titleFirst }}', '{{$invoicedShare}}' );
 
               if ('{{ $graphId }}' != 'chart-revenue-invoiced') {
                 startChart('{{ $graphId }}', chartOptions);
@@ -49,7 +49,7 @@
 
 
 
-            <div class="container text-center fs-custom">
+            <div class="container text-center fs-c">
               <div class="row">
                 <table class="table mt-1">
                   <thead class="thead-light">
@@ -71,20 +71,20 @@
             </div>
 
             <div class="text-left p-1 mx-1">
-              <h6 class="card-title fw-bold fs-6"> {{ $subtitleMain }} <!-- Pagamentos: --> </h6>
+              <h6 class="card-title fw-bold fs-c"> {{ $subtitleMain }} <!-- Pagamentos: --> </h6>
             </div>
 
-            <div class="d-flex justify-content-evenly align-items-center">
-                <div class="d-flex justify-content-evenly">
+            <div class="row d-flex justify-content-evenly align-items-center">
+                <div class="col d-flex justify-content-evenly">
                   <h6 class="round-pill"></h6>
-                  <h6 class="card-title fw-bold fs-custom"> {{ $subtitleFirst }} <!--Confirmados: --> </h6>
-                  <h6 class="text-body fs-custom" id='payments-confimed'> {{ $valueFirst }} </h6>
+                  <h6 class="card-title fw-bold fs-c1"> {{ $subtitleFirst }} <!--Confirmados: --> </h6>
+                  <h6 class="text-body fs-c1" id='payments-confimed'> {{ $valueFirst }} </h6>
                 </div>
 
-                <div class="d-flex justify-content-evenly">
+                <div class="col d-flex justify-content-evenly">
                   <h6 class="round-pill pending"></h6>
-                  <h6 class="card-title fw-bold fs-custom"> {{ $subtitleSecond }} <!-- Pendentes: --> </h6>
-                  <h6 class="text-body fs-custom" id='payments-pending'> {{ $valueSecond }} </h6>
+                  <h6 class="card-title fw-bold fs-c1"> {{ $subtitleSecond }} <!-- Pendentes: --> </h6>
+                  <h6 class="text-body fs-c1" id='payments-pending'> {{ $valueSecond }} </h6>
                 </div>
 
             </div>

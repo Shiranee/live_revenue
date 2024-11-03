@@ -29,12 +29,20 @@ body {
     box-shadow: rgba(0, 0, 0, 0.18) 0px 1px 2px;
 }
 
-.fs-custom {
-    font-size: 0.8rem !important;
+.fs-c {
+    font-size: clamp(0.9rem, 0.08rem + 0.7vw, 1.2rem) !important;
 }
 
-.fs-custom-1 {
-    font-size: 0.75rem !important;
+.fs-c1 {
+    font-size: clamp(0.85rem, 0.075rem + 0.7vw, 1.1rem) !important;
+}
+
+.fs-t1 {
+   font-size: clamp(1.5rem, 0.7rem + 1vw, 1.5rem) !important;
+}
+
+.fs-t2 {
+    font-size: clamp(1rem, 0.5rem + 1vw, 1rem) !important;
 }
 
 .h-49 {
@@ -66,3 +74,15 @@ body {
     height: 130px;
     width: 96%;
 }
+/* 
+.fs-custom {
+    font-size: 0.8rem !important;
+}
+
+.fs-custom-1 {
+    font-size: 0.75rem !important;
+}
+
+.fs-t1 {
+    font-size: 1.5rem !important;
+} */

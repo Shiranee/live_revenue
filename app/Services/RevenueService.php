@@ -7,7 +7,7 @@ use Exception;
 
 class RevenueService
 {
-    public function getOrderSummary($start_date, $end_date, $operation, $invoiced = null)
+    public function getRevenue($start_date, $end_date, $operation, $invoiced = null)
     {
         // Validate the dates
         $this->validateDates($start_date, $end_date);
@@ -82,6 +82,45 @@ class RevenueService
 
             default:
                 throw new Exception('Invalid operation'); // Handle invalid operation
+        }
+    }
+
+    public function getDevolutions($start_date, $end_date, $operation, $invoiced = null)
+    {
+        // Validate the dates
+        $this->validateDates($start_date, $end_date);
+        
+        // Initialize the base query
+        $query = DB::table('orders')
+            ->whereBetween('order_date', [$start_date, $end_date]);
+    
+        // Add additional condition based on $invoiced if provided
+        if ($invoiced !== null) {
+            $query->where('invoiced', $invoiced);
+        }
+    
+        // Determine the operation to perform
+        switch ($operation) {
+            case 'summary':
+                // Fetch aggregated summary
+                return $query->selectRaw('
+                    COUNT(id) as orders,
+                    COUNT(DISTINCT customer_id) as customers,
+                    SUM(amount) as amount,
+                    SUM(price_paid) * 0.2 as revenue
+                ')->first();
+    
+            case 'statusInvoiced':
+                // Fetch counts grouped by invoiced status
+                return $query->selectRaw('
+                    invoiced AS status,
+                    COUNT(id) as orders
+                ')
+                ->groupBy('status')
+                ->get();
+    
+            default:
+                throw new \InvalidArgumentException('Invalid operation specified.');
         }
     }
 

@@ -22,6 +22,8 @@ class DashboardController extends Controller
         $cards = [];
         $cardsOperations = ['today', 'summary', 'invoiced'];
         $cardsRevenueTitles = ['Hoje', 'Acumulada', 'Faturada'];
+        $cardsRevenueSubTitle = ['Captado', 'Líquido', 'Líquido'];
+
 
         foreach ($cardsOperations as $index => $operation) {        
             // Initialize confirmed and pending payments for each operation
@@ -30,16 +32,19 @@ class DashboardController extends Controller
 
             // Fetch order summaries based on the operation type
             if ($operation === 'today') {
-                $response = $this->orderService->getOrderSummary($end_date, $end_date, 'summary');
-                $responseSub = $this->orderService->getOrderSummary($end_date, $end_date, 'status');
+                $response = $this->orderService->getRevenue($end_date, $end_date, 'summary');
+                $responseDevolutions = $this->orderService->getDevolutions($end_date, $end_date, 'summary');
+                $responseSub = $this->orderService->getRevenue($end_date, $end_date, 'status');
             } elseif ($operation === 'invoiced') {
-                $response = $this->orderService->getOrderSummary($start_date, $end_date, 'summary', true);
-                $responseSub = $this->orderService->getOrderSummary($start_date, $end_date, 'statusInvoiced');
+                $response = $this->orderService->getRevenue($start_date, $end_date, 'summary', true);
+                $responseDevolutions = $this->orderService->getDevolutions($start_date, $end_date, 'summary', true);
+                $responseSub = $this->orderService->getRevenue($start_date, $end_date, 'statusInvoiced');
             } else {
-                $response = $this->orderService->getOrderSummary($start_date, $end_date, $operation);
-                $responseSub = $this->orderService->getOrderSummary($start_date, $end_date, 'status');
+                $response = $this->orderService->getRevenue($start_date, $end_date, $operation);
+                $responseDevolutions = $this->orderService->getDevolutions($start_date, $end_date, $operation);
+                $responseSub = $this->orderService->getRevenue($start_date, $end_date, 'status');
             }
-        
+
             try {
                 if (!$response) {
                     throw new \Exception('No data found for the specified date range');
@@ -63,8 +68,12 @@ class DashboardController extends Controller
                 'titleFirst' => 'Receita ' . $cardsRevenueTitles[$index],
                 'tooltip' => 'Comparação ao dia anterior',
                 'comparison' => '-6.8%', // You might want to calculate this based on previous data
-                'titleSecond' => 'Capturada',
-                'revenue' => 'R$ ' . number_format(round($response->revenue ?? $default), 0, ',', '.'),
+                'titleSecond' => $cardsRevenueSubTitle[$index],
+                'revenue' => 'R$ ' . (
+                    $cardsRevenueTitles[$index] === 'Hoje'
+                        ? number_format(round($response->revenue ?? $default), 0, ',', '.')
+                        : number_format(round(($response->revenue ?? 0) - ($responseDevolutions->revenue ?? 0)), 0, ',', '.')
+                ),
                 'graphId' => 'chart-revenue-' . $cardsOperations[$index], // Unique ID for each chart
                 'customers' => $response->customers ?? 0,
                 'orders' => $response->orders ?? 0,
@@ -74,72 +83,20 @@ class DashboardController extends Controller
                 'subtitleSecond' => 'Pendentes:',
                 'valueFirst' => $confirmed, // Amount for confirmed payments
                 'valueSecond' => $pending, // Amount for pending payments
+                'invoicedShare' => $confirmed ? round(($confirmed / ($confirmed + $pending)) * 100) : 0,
+            ];
+            $cardsDevolution[] = [
+                'dTitle' => 'Devoluções ' . $cardsRevenueTitles[$index],
+                // 'tooltip' => 'Comparação ao dia anterior',
+                'dComparison' => '-6.8%', // You might want to calculate this based on previous data
+                'devolutions' => 'R$ ' . number_format(round($responseDevolutions->revenue ?? $default), 0, ',', '.'),
             ];
         }
 
         // Pass the cards data to the view
-        return view('dashboard', compact('cards'));
+        return view('dashboard', compact('cards', 'cardsDevolution'));
     }
     public function divergencesIndex() {
         return view('dashboards.ordersDivergences');
     }
 }
-
-
-
-
-// public function index()
-// {
-//     $cards = [
-//         [
-//             'titleFirst' => 'Receita Hoje',
-//             'tooltip' => 'Comparação ao dia anterior',
-//             'comparison' => '-6.8%',
-//             'titleSecond' => 'Capturada',
-//             'revenue' => 5000,
-//             'graphId' => 'revenue-chart-1',
-//             'customers' => 100,
-//             'orders' => 50,
-//             'amount' => 2000,
-//             'subtitleMain' => 'Pagamentos',
-//             'subtitleFirst' => 'Confirmados:',
-//             'subtitleSecond' => 'Pendentes:',
-//             'valueFirst' => 1200,
-//             'valueSecond' => 800,
-//         ],
-//         [
-//             'titleFirst' => 'Receita Ontem',
-//             'tooltip' => 'Comparação ao dia anterior',
-//             'comparison' => '+4.5%',
-//             'titleSecond' => 'Capturada',
-//             'revenue' => 4500,
-//             'graphId' => 'revenue-chart-2',
-//             'customers' => 90,
-//             'orders' => 45,
-//             'amount' => 1800,
-//             'subtitleMain' => 'Pagamentos',
-//             'subtitleFirst' => 'Confirmados:',
-//             'subtitleSecond' => 'Pendentes:',
-//             'valueFirst' => 1100,
-//             'valueSecond' => 700,
-//         ],
-//         [
-//             'titleFirst' => 'Receita Semana',
-//             'tooltip' => 'Comparação à semana passada',
-//             'comparison' => '+12.0%',
-//             'titleSecond' => 'Capturada',
-//             'revenue' => 30000,
-//             'graphId' => 'revenue-chart-3',
-//             'customers' => 500,
-//             'orders' => 300,
-//             'amount' => 12000,
-//             'subtitleMain' => 'Pagamentos',
-//             'subtitleFirst' => 'Confirmados:',
-//             'subtitleSecond' => 'Pendentes:',
-//             'valueFirst' => 9000,
-//             'valueSecond' => 3000,
-//         ],
-//     ];
-
-//     return view('dashboard', compact('cards'));
-// }

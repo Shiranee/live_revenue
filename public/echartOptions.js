@@ -25,7 +25,7 @@ export const optionLinesLabels = {
 export function optionLine(title, seriesData) {
   return {
     title: {
-      text: `(%) Share ${title}`,
+      text: `${title}`,
       left: 4,
       textStyle: {
         fontWeight: 'bold',
@@ -38,7 +38,7 @@ export function optionLine(title, seriesData) {
       formatter: function (params) {
         let tooltipContent = `${params[0].axisValue}<br/>`; // Display the x-axis date (or category value)
         params.forEach(item => {
-          tooltipContent += `${item.marker} ${item.seriesName}: R$${item.value.toFixed(0)}<br/>`; // Format with currency sign and zero decimal places
+          tooltipContent += `R$${item.value.toFixed(0)}<br/>`; // Format with currency sign and zero decimal places
         });
         return tooltipContent;
       }
@@ -91,7 +91,7 @@ export function optionLine(title, seriesData) {
 export function optionGauge(title, seriesData) {
   return {
     title: {
-      text: `(%) Share ${title}`,
+      text: `${title}`,
       left: 4,
       textStyle: {
         fontWeight: 'bold',
@@ -167,7 +167,7 @@ export function optionGauge(title, seriesData) {
 export function optionBarGauge(title, seriesData) {
   return {
     title: {
-      text: `(%) Share ${title}`,
+      text: `${title}`,
       left: 4,
       textStyle: {
         fontWeight: 'bold',
@@ -212,7 +212,7 @@ export function optionBarGauge(title, seriesData) {
     series: [
       {
         name: 'Usage', // Optional: Name of the series
-        data: [90], // Value to display
+        data: [seriesData], // Value to display
         type: 'bar',
         itemStyle: {
           color: 'rgb(211, 224, 199)',
