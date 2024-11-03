@@ -17,8 +17,10 @@ class DashboardController extends Controller
     public function index()
     {
         $default = "Carregando...";
-        $start_date = '2024-09-01';
-        $end_date = '2024-09-30';
+        $date_start = '2024-09-01';
+        $date_end = '2024-09-30';
+        $ly_date_start = new \DateTime($date_start);
+        $ly_date_end = new \DateTime($date_end);
         $cards = [];
         $cardsOperations = ['today', 'summary', 'invoiced'];
         $cardsRevenueTitles = ['Hoje', 'Acumulada', 'Faturada'];
@@ -32,17 +34,20 @@ class DashboardController extends Controller
 
             // Fetch order summaries based on the operation type
             if ($operation === 'today') {
-                $response = $this->orderService->getRevenue($end_date, $end_date, 'summary');
-                $responseDevolutions = $this->orderService->getDevolutions($end_date, $end_date, 'summary');
-                $responseSub = $this->orderService->getRevenue($end_date, $end_date, 'status');
+                $response = $this->orderService->getRevenue($date_end, $date_end, 'summary');
+                $responseLy = $this->orderService->getRevenue($ly_date_end->modify('-1 day')->format('Y-m-d'), $ly_date_end->modify('-1 day')->format('Y-m-d'), 'summary');
+                $responseDevolutions = $this->orderService->getDevolutions($date_end, $date_end, 'summary');
+                $responseSub = $this->orderService->getRevenue($date_end, $date_end, 'status');
             } elseif ($operation === 'invoiced') {
-                $response = $this->orderService->getRevenue($start_date, $end_date, 'summary', true);
-                $responseDevolutions = $this->orderService->getDevolutions($start_date, $end_date, 'summary', true);
-                $responseSub = $this->orderService->getRevenue($start_date, $end_date, 'statusInvoiced');
+                $response = $this->orderService->getRevenue($date_start, $date_end, 'summary', true);
+                $responseLy = $this->orderService->getRevenue($ly_date_start->modify('-1 day')->format('Y-m-d'), $ly_date_end->modify('-1 day')->format('Y-m-d'), 'summary', true);
+                $responseDevolutions = $this->orderService->getDevolutions($date_start, $date_end, 'summary', true);
+                $responseSub = $this->orderService->getRevenue($date_start, $date_end, 'statusInvoiced');
             } else {
-                $response = $this->orderService->getRevenue($start_date, $end_date, $operation);
-                $responseDevolutions = $this->orderService->getDevolutions($start_date, $end_date, $operation);
-                $responseSub = $this->orderService->getRevenue($start_date, $end_date, 'status');
+                $response = $this->orderService->getRevenue($date_start, $date_end, $operation);
+                $responseLy = $this->orderService->getRevenue($ly_date_start->modify('-1 day')->format('Y-m-d'), $ly_date_end->modify('-1 day')->format('Y-m-d'), $operation);
+                $responseDevolutions = $this->orderService->getDevolutions($date_start, $date_end, $operation);
+                $responseSub = $this->orderService->getRevenue($date_start, $date_end, 'status');
             }
 
             try {
@@ -67,7 +72,9 @@ class DashboardController extends Controller
             $cards[] = [
                 'titleFirst' => 'Receita ' . $cardsRevenueTitles[$index],
                 'tooltip' => 'Comparação ao dia anterior',
-                'comparison' => '-6.8%', // You might want to calculate this based on previous data
+                'comparison' => $responseLy->revenue != 0 
+                    ? number_format((($response->revenue - $responseLy->revenue) / $responseLy->revenue) * 100, 2, ',', '.') . '%' 
+                    : 'N/A',
                 'titleSecond' => $cardsRevenueSubTitle[$index],
                 'revenue' => 'R$ ' . (
                     $cardsRevenueTitles[$index] === 'Hoje'

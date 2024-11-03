@@ -7,10 +7,10 @@ use Exception;
 
 class RevenueService
 {
-    public function getRevenue($start_date, $end_date, $operation, $invoiced = null)
+    public function getRevenue($date_start, $date_end, $operation, $invoiced = null)
     {
         // Validate the dates
-        $this->validateDates($start_date, $end_date);
+        // $this->validateDates($date_start, $date_end);
         
         // Initialize the query
         $query = DB::table('orders')
@@ -20,7 +20,7 @@ class RevenueService
                 SUM(amount) as amount,
                 SUM(price_paid) as revenue
             ')
-            ->whereBetween('order_date', [$start_date, $end_date]);
+            ->whereBetween('order_date', [$date_start, $date_end]);
 
         // Add additional condition based on $invoiced if it's not null
         if ($invoiced !== null) {
@@ -38,7 +38,7 @@ class RevenueService
                         CASE WHEN order_status <> \'Pending\' THEN TRUE ELSE FALSE END AS status,
                         COUNT(id) as orders
                     ')
-                    ->whereBetween('order_date', [$start_date, $end_date])
+                    ->whereBetween('order_date', [$date_start, $date_end])
                     ->groupBy('status')
                     ->get();
             
@@ -48,7 +48,7 @@ class RevenueService
                         invoiced AS status,
                         COUNT(id) as orders
                     ')
-                    ->whereBetween('order_date', [$start_date, $end_date])
+                    ->whereBetween('order_date', [$date_start, $date_end])
                     ->groupBy('status')
                     ->get();
 
@@ -61,7 +61,7 @@ class RevenueService
                         SUM(amount) as amount,
                         SUM(price_paid) as revenue
                     ')
-                    ->whereDate('order_date', $end_date)
+                    ->whereDate('order_date', $date_end)
                     ->groupBy('hour')
                     ->orderBy('hour', 'desc')
                     ->get();
@@ -75,7 +75,7 @@ class RevenueService
                         SUM(amount) as amount,
                         SUM(price_paid) as revenue
                     ')
-                    ->whereBetween('order_date', [$start_date, $end_date])
+                    ->whereBetween('order_date', [$date_start, $date_end])
                     ->groupBy('order_date')
                     ->orderBy('order_date', 'desc')
                     ->get();
@@ -85,14 +85,14 @@ class RevenueService
         }
     }
 
-    public function getDevolutions($start_date, $end_date, $operation, $invoiced = null)
+    public function getDevolutions($date_start, $date_end, $operation, $invoiced = null)
     {
         // Validate the dates
-        $this->validateDates($start_date, $end_date);
+        // $this->validateDates($date_start, $date_end);
         
         // Initialize the base query
         $query = DB::table('orders')
-            ->whereBetween('order_date', [$start_date, $end_date]);
+            ->whereBetween('order_date', [$date_start, $date_end]);
     
         // Add additional condition based on $invoiced if provided
         if ($invoiced !== null) {
@@ -124,23 +124,23 @@ class RevenueService
         }
     }
 
-    private function validateDates($start_date, $end_date)
-    {
-        $format = 'Y-m-d';
-        $startDateTime = \DateTime::createFromFormat($format, $start_date);
-        $endDateTime = \DateTime::createFromFormat($format, $end_date);
+    // private function validateDates($date_start, $date_end)
+    // {
+    //     $format = 'Y-m-d';
+    //     $startDateTime = \DateTime::createFromFormat($format, $date_start);
+    //     $endDateTime = \DateTime::createFromFormat($format, $date_end);
 
-        if (!$startDateTime || !$endDateTime) {
-            throw new Exception('Invalid date format. Please use YYYY-MM-DD.');
-        }
+    //     if (!$startDateTime || !$endDateTime) {
+    //         throw new Exception('Invalid date format. Please use YYYY-MM-DD.');
+    //     }
 
-        if ($startDateTime > $endDateTime) {
-            throw new Exception('Start date must be before or equal to end date.');
-        }
+    //     if ($startDateTime > $endDateTime) {
+    //         throw new Exception('Start date must be before or equal to end date.');
+    //     }
 
-        $currentDate = new \DateTime();
-        if ($startDateTime > $currentDate || $endDateTime > $currentDate) {
-            throw new Exception('Dates must not be in the future.');
-        }
-    }
+    //     $currentDate = new \DateTime();
+    //     if ($startDateTime > $currentDate || $endDateTime > $currentDate) {
+    //         throw new Exception('Dates must not be in the future.');
+    //     }
+    // }
 }
