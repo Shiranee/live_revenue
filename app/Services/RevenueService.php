@@ -124,23 +124,23 @@ class RevenueService
         }
     }
 
-    // private function validateDates($date_start, $date_end)
-    // {
-    //     $format = 'Y-m-d';
-    //     $startDateTime = \DateTime::createFromFormat($format, $date_start);
-    //     $endDateTime = \DateTime::createFromFormat($format, $date_end);
+    private function validateDates($date_start, $date_end)
+    {
+        $format = 'Y-m-d';
+        $startDateTime = \DateTime::createFromFormat($format, $date_start);
+        $endDateTime = \DateTime::createFromFormat($format, $date_end);
 
-    //     if (!$startDateTime || !$endDateTime) {
-    //         throw new Exception('Invalid date format. Please use YYYY-MM-DD.');
-    //     }
+        if (!$startDateTime || !$endDateTime) {
+            throw new Exception('Invalid date format. Please use YYYY-MM-DD.');
+        }
 
-    //     if ($startDateTime > $endDateTime) {
-    //         throw new Exception('Start date must be before or equal to end date.');
-    //     }
+        if ($startDateTime > $endDateTime) {
+            throw new Exception('Start date must be before or equal to end date.');
+        }
 
-    //     $currentDate = new \DateTime();
-    //     if ($startDateTime > $currentDate || $endDateTime > $currentDate) {
-    //         throw new Exception('Dates must not be in the future.');
-    //     }
-    // }
+        $currentDate = new \DateTime();
+        if ($startDateTime > $currentDate || $endDateTime > $currentDate) {
+            throw new Exception('Dates must not be in the future.');
+        }
+    }
 }

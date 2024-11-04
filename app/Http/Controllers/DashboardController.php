@@ -19,37 +19,70 @@ class DashboardController extends Controller
         $default = "Carregando...";
         $date_start = '2024-09-01';
         $date_end = '2024-09-30';
-        $ly_date_start = new \DateTime($date_start);
-        $ly_date_end = new \DateTime($date_end);
         $cards = [];
         $cardsOperations = ['today', 'summary', 'invoiced'];
         $cardsRevenueTitles = ['Hoje', 'Acumulada', 'Faturada'];
         $cardsRevenueSubTitle = ['Captado', 'Líquido', 'Líquido'];
-
-
+    
         foreach ($cardsOperations as $index => $operation) {        
             // Initialize confirmed and pending payments for each operation
             $confirmed = 0;
             $pending = 0;
-
+    
+            // Create new DateTime instances for each operation
+            $ly_date_start = new \DateTime($date_start);
+            $ly_date_end = new \DateTime($date_end);
+    
             // Fetch order summaries based on the operation type
             if ($operation === 'today') {
                 $response = $this->orderService->getRevenue($date_end, $date_end, 'summary');
-                $responseLy = $this->orderService->getRevenue($ly_date_end->modify('-1 day')->format('Y-m-d'), $ly_date_end->modify('-1 day')->format('Y-m-d'), 'summary');
+    
+                // Modify a clone for the previous day
+                $ly_date_end_clone = clone $ly_date_end;
+                $ly_date_end_clone->modify('-1 day');
+                $responseLy = $this->orderService->getRevenue(
+                    $ly_date_end_clone->format('Y-m-d'), 
+                    $ly_date_end_clone->format('Y-m-d'), 
+                    'summary'
+                );
+    
                 $responseDevolutions = $this->orderService->getDevolutions($date_end, $date_end, 'summary');
                 $responseSub = $this->orderService->getRevenue($date_end, $date_end, 'status');
             } elseif ($operation === 'invoiced') {
                 $response = $this->orderService->getRevenue($date_start, $date_end, 'summary', true);
-                $responseLy = $this->orderService->getRevenue($ly_date_start->modify('-1 day')->format('Y-m-d'), $ly_date_end->modify('-1 day')->format('Y-m-d'), 'summary', true);
+    
+                // Modify a clone for the previous day
+                $ly_date_start_clone = clone $ly_date_start;
+                $ly_date_end_clone = clone $ly_date_end;
+                $ly_date_start_clone->modify('-1 day');
+                $ly_date_end_clone->modify('-1 day');
+                $responseLy = $this->orderService->getRevenue(
+                    $ly_date_start_clone->format('Y-m-d'), 
+                    $ly_date_end_clone->format('Y-m-d'), 
+                    'summary', 
+                    true
+                );
+    
                 $responseDevolutions = $this->orderService->getDevolutions($date_start, $date_end, 'summary', true);
                 $responseSub = $this->orderService->getRevenue($date_start, $date_end, 'statusInvoiced');
             } else {
                 $response = $this->orderService->getRevenue($date_start, $date_end, $operation);
-                $responseLy = $this->orderService->getRevenue($ly_date_start->modify('-1 day')->format('Y-m-d'), $ly_date_end->modify('-1 day')->format('Y-m-d'), $operation);
+    
+                // Modify a clone for the previous day
+                $ly_date_start_clone = clone $ly_date_start;
+                $ly_date_end_clone = clone $ly_date_end;
+                $ly_date_start_clone->modify('-1 day');
+                $ly_date_end_clone->modify('-1 day');
+                $responseLy = $this->orderService->getRevenue(
+                    $ly_date_start_clone->format('Y-m-d'), 
+                    $ly_date_end_clone->format('Y-m-d'), 
+                    $operation
+                );
+    
                 $responseDevolutions = $this->orderService->getDevolutions($date_start, $date_end, $operation);
                 $responseSub = $this->orderService->getRevenue($date_start, $date_end, 'status');
             }
-
+    
             try {
                 if (!$response) {
                     throw new \Exception('No data found for the specified date range');
@@ -62,7 +95,7 @@ class DashboardController extends Controller
             // Iterate through the status data to calculate confirmed and pending amounts
             foreach ($responseSub as $status) {
                 if ($status->status === true) {
-                    $confirmed += $status->orders; // Sum orderss for 'Pago'
+                    $confirmed += $status->orders; // Sum orders for 'Pago'
                 } else {
                     $pending += $status->orders; // Sum amounts for 'Aguardando Pagamento'
                 }
@@ -73,7 +106,7 @@ class DashboardController extends Controller
                 'titleFirst' => 'Receita ' . $cardsRevenueTitles[$index],
                 'tooltip' => 'Comparação ao dia anterior',
                 'comparison' => $responseLy->revenue != 0 
-                    ? number_format((($response->revenue - $responseLy->revenue) / $responseLy->revenue) * 100, 2, ',', '.') . '%' 
+                    ? number_format((($response->revenue - $responseLy->revenue) / $responseLy->revenue) * 100, 0, ',', '.') . '%' 
                     : 'N/A',
                 'titleSecond' => $cardsRevenueSubTitle[$index],
                 'revenue' => 'R$ ' . (
@@ -94,16 +127,13 @@ class DashboardController extends Controller
             ];
             $cardsDevolution[] = [
                 'dTitle' => 'Devoluções ' . $cardsRevenueTitles[$index],
-                // 'tooltip' => 'Comparação ao dia anterior',
                 'dComparison' => '-6.8%', // You might want to calculate this based on previous data
                 'devolutions' => 'R$ ' . number_format(round($responseDevolutions->revenue ?? $default), 0, ',', '.'),
             ];
         }
-
+    
         // Pass the cards data to the view
         return view('dashboard', compact('cards', 'cardsDevolution'));
     }
-    public function divergencesIndex() {
-        return view('dashboards.ordersDivergences');
-    }
+    
 }
