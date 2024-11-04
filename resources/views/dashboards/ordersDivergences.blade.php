@@ -1,6 +1,6 @@
 @include('components.head', ['pageName' => 'LIVE! Receita E-commerce'])
 
-<body>
+<body >
   <header class="header m-shadow">
   </header>
   <div class="row center mb-4" style="height: 85vh;">
@@ -15,12 +15,12 @@
             <div>
               <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">
                 Divergencias
-                <span class="round-pill" data-bs-toggle="tooltip" title="Comparado ao Mês Anterior"> -6.8% </span>
+                <span class="round-pill" data-bs-toggle="tooltip" title="Comparado ao Período Anterior"> {{ $comparison }} </span>
               </h5>
               <h6 class="text-body-tertiary"> Pedidos </h6>
             </div>
 
-            <h1 class="card-title fw-bold"> 100.000 </h1>
+            <h1 class="card-title fw-bold"> {{ $orders }} </h1>
 
           </div>
 
@@ -38,9 +38,9 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>10.000</td>
-                    <td>10.000</td>
-                    <td>10.000</td>
+                    <td>{{ $customers }}</td>
+                    <td>{{ $orders }}</td>
+                    <td>{{ $amount }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -57,10 +57,10 @@
 
   </div>
   
-  <div class="row center mb-3" style="height: 85vh;">
-    <div class="col h-90">
-      <div class="card mb-3 m-shadow h-49"></div>
-      <div class="card mb-3 m-shadow h-49">
+  <div class="row center mb-5">
+    <div class="col">
+      <div class="card mb-3 p-3 m-shadow">Graph Placeholder</div>
+      <div class="card p-3 m-shadow">
         @include('components.table')
       </div>
     </div>

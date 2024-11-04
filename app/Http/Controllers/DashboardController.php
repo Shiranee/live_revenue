@@ -135,5 +135,8 @@ class DashboardController extends Controller
         // Pass the cards data to the view
         return view('dashboard', compact('cards', 'cardsDevolution'));
     }
-    
+
+    public function divergencesIndex() {
+        return view('dashboards.ordersDivergences');
+    }
 }
