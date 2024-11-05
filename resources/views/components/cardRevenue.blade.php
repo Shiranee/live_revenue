@@ -21,9 +21,8 @@
               import * as echartOptions from "{{ asset('echartOptions.js') }}";
 
               const seriesData = {
-
-                series : [150, 230, 224, 218, 135, 147, 260],
-                xSeries : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                revenue : [150, 230, 224, 218, 135, 147, 260],
+                period : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
               }
 
               const gaugeData = [{

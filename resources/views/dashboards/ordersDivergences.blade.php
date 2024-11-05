@@ -15,12 +15,16 @@
             <div>
               <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">
                 Divergencias
-                <span class="round-pill" data-bs-toggle="tooltip" title="Comparado ao Período Anterior"> {{ $comparison }} </span>
+                <span class="round-pill" data-bs-toggle="tooltip" title="Comparado ao Período Anterior"> 
+                
+               </span>
               </h5>
               <h6 class="text-body-tertiary"> Pedidos </h6>
             </div>
 
-            <h1 class="card-title fw-bold"> {{ $orders }} </h1>
+            <h1 class="card-title fw-bold"> 
+            
+           </h1>
 
           </div>
 
@@ -38,9 +42,15 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{{ $customers }}</td>
-                    <td>{{ $orders }}</td>
-                    <td>{{ $amount }}</td>
+                    <td>
+                    
+                  </td>
+                    <td>
+                    
+                  </td>
+                    <td>
+                    
+                  </td>
                   </tr>
                 </tbody>
               </table>

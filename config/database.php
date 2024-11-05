@@ -118,6 +118,7 @@ return [
             'host' => env('NECOMM_HOST', '127.0.0.1'),
             'port' => env('NECOMM_PORT', '5432'),
             'database' => env('NECOMM_DATABASE', 'laravel'),
+            'schema' => env('NECOMM_SCHEMA', 'public'),
             'username' => env('NECOMM_USERNAME', 'root'),
             'password' => env('NECOMM_PASSWORD', ''),
             'charset' => env('NECOMM_CHARSET', 'utf8'),
