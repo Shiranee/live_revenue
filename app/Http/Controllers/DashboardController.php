@@ -16,10 +16,9 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $default = "Carregando...";
+        $default = "0";
         $date_start = '2024-09-01';
         $date_end = '2024-09-30';
-        $cards = [];
         $cardsOperations = ['today', 'summary', 'invoiced'];
         $cardsRevenueTitles = ['Hoje', 'Acumulada', 'Faturada'];
         $cardsRevenueSubTitle = ['Captado', 'Líquido', 'Líquido'];
@@ -36,29 +35,29 @@ class DashboardController extends Controller
             // Fetch order summaries based on the operation type
             if ($operation === 'today') {
                 $response = $this->orderService->getRevenue($date_end, $date_end, 'summary');
+                $responsePeriod = $this->orderService->getRevenue($date_end, $date_end, 'today');
     
                 // Modify a clone for the previous day
-                $ly_date_end_clone = clone $ly_date_end;
-                $ly_date_end_clone->modify('-1 day');
+                $ly_date_end->modify('-1 day')->format('Y-m-d');
                 $responseLy = $this->orderService->getRevenue(
-                    $ly_date_end_clone->format('Y-m-d'), 
-                    $ly_date_end_clone->format('Y-m-d'), 
+                    $ly_date_end, 
+                    $ly_date_end, 
                     'summary'
                 );
     
                 $responseDevolutions = $this->orderService->getDevolutions($date_end, $date_end, 'summary');
                 $responseSub = $this->orderService->getRevenue($date_end, $date_end, 'status');
+
             } elseif ($operation === 'invoiced') {
                 $response = $this->orderService->getRevenue($date_start, $date_end, 'summary', true);
+                $responsePeriod = $this->orderService->getRevenue($date_start, $date_end, 'period', true);
     
                 // Modify a clone for the previous day
-                $ly_date_start_clone = clone $ly_date_start;
-                $ly_date_end_clone = clone $ly_date_end;
-                $ly_date_start_clone->modify('-1 day');
-                $ly_date_end_clone->modify('-1 day');
+                $ly_date_start->modify('-1 day')->format('Y-m-d');
+                $ly_date_end->modify('-1 day')->format('Y-m-d');
                 $responseLy = $this->orderService->getRevenue(
-                    $ly_date_start_clone->format('Y-m-d'), 
-                    $ly_date_end_clone->format('Y-m-d'), 
+                    $ly_date_start, 
+                    $ly_date_end, 
                     'summary', 
                     true
                 );
@@ -67,15 +66,14 @@ class DashboardController extends Controller
                 $responseSub = $this->orderService->getRevenue($date_start, $date_end, 'statusInvoiced');
             } else {
                 $response = $this->orderService->getRevenue($date_start, $date_end, $operation);
+                $responsePeriod = $this->orderService->getRevenue($date_start, $date_end, 'period');
     
                 // Modify a clone for the previous day
-                $ly_date_start_clone = clone $ly_date_start;
-                $ly_date_end_clone = clone $ly_date_end;
-                $ly_date_start_clone->modify('-1 day');
-                $ly_date_end_clone->modify('-1 day');
+                $ly_date_start->modify('-1 day')->format('Y-m-d');
+                $ly_date_end->modify('-1 day')->format('Y-m-d');
                 $responseLy = $this->orderService->getRevenue(
-                    $ly_date_start_clone->format('Y-m-d'), 
-                    $ly_date_end_clone->format('Y-m-d'), 
+                    $ly_date_start, 
+                    $ly_date_end, 
                     $operation
                 );
     
@@ -124,6 +122,8 @@ class DashboardController extends Controller
                 'valueFirst' => $confirmed, // Amount for confirmed payments
                 'valueSecond' => $pending, // Amount for pending payments
                 'invoicedShare' => $confirmed ? round(($confirmed / ($confirmed + $pending)) * 100) : 0,
+                // '$revenuePeriod' => $responsePeriod->revenue ?? 0,
+                // '$period' => (string) $responsePeriod->period,
             ];
             $cardsDevolution[] = [
                 'dTitle' => 'Devoluções ' . $cardsRevenueTitles[$index],

@@ -1,31 +1,31 @@
-export const optionLinesLabels = {
-  type: 'line',
-  lineStyle: {
-    width: 3.5
-  },
-  symbolSize: 3.5,
-  symbol: 'circle',
-  label: {
-    show: true,
-    position: 'outside',
-    verticalAlign: 'middle',
-    color: 'black',
-    fontSize: 12,
-    fontWeight: 'bold',
-    backgroundColor: 'rgba(241, 237, 241, 0.7)', // Transparent background for the label
-    borderColor: 'grey',
-    borderRadius: 10,
-    padding: 5,
-    formatter: function (params) {
-      return `R$ ${params.value.toFixed(0)}`; // Display currency with no decimals
+export function optionLine(title, seriesData, xAxisData, showLegends) {
+  let optionLabels = {
+    type: 'line',
+    lineStyle: {
+      width: 3.5
+    },
+    symbolSize: 3.5,
+    symbol: 'circle',
+    label: {
+      show: true,
+      position: 'outside',
+      verticalAlign: 'middle',
+      color: 'black',
+      fontSize: 12,
+      fontWeight: 'bold',
+      backgroundColor: 'rgba(241, 237, 241, 0.7)', // Transparent background for the label
+      borderColor: 'grey',
+      borderRadius: 10,
+      padding: 5,
+      formatter: function (params) {
+        return `R$ ${params.value.toFixed(0)}`; // Display currency with no decimals
+      }
     }
-  }
-};
+  };
 
-export function optionLine(title, seriesData) {
-  return {
+  let option = {
     title: {
-      text: `${title}`,
+      text: title,
       left: 4,
       textStyle: {
         fontWeight: 'bold',
@@ -36,9 +36,9 @@ export function optionLine(title, seriesData) {
     tooltip: {
       trigger: 'axis',
       formatter: function (params) {
-        let tooltipContent = `${params[0].axisValue}<br/>`; // Display the x-axis date (or category value)
+        let tooltipContent = `${params[0].axisValue}<br/>`;
         params.forEach(item => {
-          tooltipContent += `R$${item.value.toFixed(0)}<br/>`; // Format with currency sign and zero decimal places
+          tooltipContent += `R$${item.value.toFixed(0)}<br/>`;
         });
         return tooltipContent;
       }
@@ -55,13 +55,13 @@ export function optionLine(title, seriesData) {
     xAxis: {
       type: 'category',
       boundaryGap: ['10%', '10%'],
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      show: false,
+      data: xAxisData,
+      show: showLegends,
       axisLine: {
         lineStyle: {
           width: 1.5,
           color: 'grey',
-          type: 'dashed'
+          type: 'line'
         }
       },
       axisTick: {
@@ -71,22 +71,24 @@ export function optionLine(title, seriesData) {
     yAxis: {
       type: 'value',
       axisLabel: {
-        show: false // Hides the left labels
+        show: false
       },
       splitLine: {
-        show: false // Hides the grid lines
+        show: false
       }
     },
-    series: seriesData
-    // [
-    //   {
-    //     name: 'Your Series Name',
-    //     data: [150, 230, 224, 218, 135, 147, 260],
-    //     ...optionLinesLabels // Spread the properties from optionLinesLabels here
-    //   }
-    // ]
+    series: [
+      {
+        name: 'Your Series Name',
+        data: seriesData,
+        ...optionLabels
+      }
+    ]
   };
-};
+
+  return option;
+}
+
 
 export function optionGauge(title, seriesData) {
   return {

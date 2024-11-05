@@ -19,14 +19,12 @@
           <div class="revenue-dashboard" id="{{ $graphId }}"></div>
           <script type="module">
               import * as echartOptions from "{{ asset('echartOptions.js') }}";
-              
-              // Declare seriesData correctly
-              const seriesData = [{
-                      name: 'Your Series Name',
-                      data: [150, 230, 224, 218, 135, 147, 260],
-                      ...echartOptions.optionLinesLabels
-                  }
-              ];
+
+              const seriesData = {
+
+                series : [150, 230, 224, 218, 135, 147, 260],
+                xSeries : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+              }
 
               const gaugeData = [{
                 value: 90,
@@ -36,14 +34,14 @@
                 }
               }]
 
-              const chartOptions = echartOptions.optionLine('{{ $titleFirst }}', seriesData);
-              // const gaugeOptions = echartOptions.optionGauge('{{ $titleFirst }}', gaugeData);
-              const gaugeOptions = echartOptions.optionBarGauge('{{ $titleFirst }}', '{{$invoicedShare}}' );
-
               if ('{{ $graphId }}' != 'chart-revenue-invoiced') {
+                const chartOptions = echartOptions.optionLine('{{ $titleFirst }}', seriesData.series, seriesData.xSeries, false);
                 startChart('{{ $graphId }}', chartOptions);
+
               } else {
+                const gaugeOptions = echartOptions.optionBarGauge('{{ $titleFirst }}', '{{$invoicedShare}}' );
                 startChart('{{ $graphId }}', gaugeOptions);
+
               }
           </script>
 

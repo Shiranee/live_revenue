@@ -22,15 +22,24 @@ class RevenueService
             ')
             ->whereBetween('order_date', [$date_start, $date_end]);
 
-        // Add additional condition based on $invoiced if it's not null
+        $queryPeriod = DB::table('orders')
+            ->selectRaw('
+                order_date AS period,
+                SUM(price_paid) as revenue
+            ')
+            ->whereBetween('order_date', [$date_start, $date_end])
+            ->groupBy('order_date')
+            ->orderBy('order_date', 'asc');
+
         if ($invoiced !== null) {
             $query->where('invoiced', $invoiced);
+            $queryPeriod->where('invoiced', $invoiced);
         }
 
         // Determine the operation to perform
         switch ($operation) {
             case 'summary':
-                return $query->first(); // Get summary
+                return $query->first();
 
             case 'status':
                 return DB::table('orders')
@@ -55,30 +64,16 @@ class RevenueService
             case 'today':
                 return DB::table('orders')
                     ->selectRaw('
-                        date_trunc(\'hour\', order_time) AS hour,
-                        COUNT(id) as orders,
-                        COUNT(DISTINCT customer_id) as customers,
-                        SUM(amount) as amount,
+                        date_trunc(\'hour\', order_time) AS period,
                         SUM(price_paid) as revenue
                     ')
                     ->whereDate('order_date', $date_end)
-                    ->groupBy('hour')
-                    ->orderBy('hour', 'desc')
+                    ->groupBy('period')
+                    ->orderBy('period', 'asc')
                     ->get();
 
             case 'period':
-                return DB::table('orders')
-                    ->selectRaw('
-                        order_date,
-                        COUNT(id) as orders,
-                        COUNT(DISTINCT customer_id) as customers,
-                        SUM(amount) as amount,
-                        SUM(price_paid) as revenue
-                    ')
-                    ->whereBetween('order_date', [$date_start, $date_end])
-                    ->groupBy('order_date')
-                    ->orderBy('order_date', 'desc')
-                    ->get();
+                return $queryPeriod->first();
 
             default:
                 throw new Exception('Invalid operation'); // Handle invalid operation
