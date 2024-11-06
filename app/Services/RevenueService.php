@@ -24,12 +24,12 @@ class RevenueService
 
         $queryPeriod = DB::table('orders')
             ->selectRaw('
-                order_date AS period,
+                TO_CHAR(order_date, \'DD/MM/YYYY\') AS period, 
                 SUM(price_paid) as revenue
             ')
             ->whereBetween('order_date', [$date_start, $date_end])
-            ->groupBy('order_date')
-            ->orderBy('order_date', 'asc');
+            ->groupBy('period')
+            ->orderBy('period', 'asc');
 
         if ($invoiced !== null) {
             $query->where('invoiced', $invoiced);
@@ -73,7 +73,7 @@ class RevenueService
                     ->get();
 
             case 'period':
-                return $queryPeriod->first();
+                return $queryPeriod->get();
 
             default:
                 throw new Exception('Invalid operation'); // Handle invalid operation

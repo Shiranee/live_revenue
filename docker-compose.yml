@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: myapp_php
+    container_name: myapp_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    networks:
+      - app-network
+    depends_on:
+      - db
+      - postgres
+      - oracle
+
+  webserver:
+    image: nginx:alpine
+    container_name: myapp_webserver
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - app-network
+    depends_on:
+      - app
+
+  db:
+    image: mysql:5.7
+    container_name: myapp_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: user
+      MYSQL_PASSWORD: secret
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:13
+    container_name: myapp_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: laravel
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  oracle:
+    image: gvenzl/oracle-xe
+    container_name: myapp_oracle
+    restart: unless-stopped
+    environment:
+      ORACLE_PASSWORD: secret
+      APP_USER: user
+      APP_USER_PASSWORD: secret
+    ports:
+      - "1521:1521"
+    volumes:
+      - oracledb:/opt/oracle/oradata
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+  pgdata:
+  oracledb:

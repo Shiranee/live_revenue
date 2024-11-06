@@ -20,10 +20,17 @@
           <script type="module">
               import * as echartOptions from "{{ asset('echartOptions.js') }}";
 
-              const seriesData = {
-                revenue : [150, 230, 224, 218, 135, 147, 260],
-                period : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-              }
+              const seriesData = @json($revenuePeriod);
+
+              let period = seriesData.map(item => item.period);
+              let revenue = seriesData.map(item => parseFloat(item.revenue.replace(',', '.')));
+              
+              // let t = {
+              //   revenue : [150, 230, 224, 218, 135, 147, 260],
+              //   period : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+              // }
+
+              console.log(period, revenue);
 
               const gaugeData = [{
                 value: 90,
@@ -34,17 +41,14 @@
               }]
 
               if ('{{ $graphId }}' != 'chart-revenue-invoiced') {
-                const chartOptions = echartOptions.optionLine('{{ $titleFirst }}', seriesData.series, seriesData.xSeries, false);
+                const chartOptions = echartOptions.optionLine('{{ $titleFirst }}', revenue, period, false);
                 startChart('{{ $graphId }}', chartOptions);
-
               } else {
                 const gaugeOptions = echartOptions.optionBarGauge('{{ $titleFirst }}', '{{$invoicedShare}}' );
                 startChart('{{ $graphId }}', gaugeOptions);
 
               }
           </script>
-
-
 
             <div class="container text-center fs-c">
               <div class="row">
