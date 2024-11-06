@@ -244,145 +244,149 @@ export function optionBarGauge(title, seriesData) {
   };
 };
 
-const gaugeData = [
-  {
-    value: 20,
-    name: 'Meta',
-    title: {
-      offsetCenter: ['0%', '-30%']
+// const gaugeData = [
+//   {
+//     value: 20,
+//     name: 'Meta',
+//     title: {
+//       offsetCenter: ['0%', '-30%']
+//     },
+//     detail: {
+//       valueAnimation: true,
+//       offsetCenter: ['0%', '-20%']
+//     }
+//   },
+//   {
+//     value: 40,
+//     name: 'Super Meta',
+//     title: {
+//       offsetCenter: ['0%', '0%']
+//     },
+//     detail: {
+//       valueAnimation: true,
+//       offsetCenter: ['0%', '10%']
+//     }
+//   },
+//   {
+//     value: 60,
+//     name: 'Diretoria',
+//     title: {
+//       offsetCenter: ['0%', '30%']
+//     },
+//     detail: {
+//       valueAnimation: true,
+//       offsetCenter: ['0%', '40%']
+//     }
+//   }
+// ];
+// option = {
+//   series: [
+//     {
+//       type: 'gauge',
+//       startAngle: 90,
+//       endAngle: -270,
+//       pointer: {
+//         show: false
+//       },
+//       progress: {
+//         show: true,
+//         overlap: false,
+//         roundCap: true,
+//         clip: false,
+//         itemStyle: {
+//           borderWidth: 1,
+//           borderColor: '#ccc'
+//         }
+//       },
+//       axisLine: {
+//         lineStyle: {
+//           width: 80
+//         }
+//       },
+//       splitLine: {
+//         show: false,
+//         distance: 0,
+//         length: 10
+//       },
+//       axisTick: {
+//         show: false
+//       },
+//       axisLabel: {
+//         show: false,
+//         distance: 50
+//       },
+//       data: gaugeData,
+//       title: {
+//         fontSize: 25
+//       },
+//       detail: {
+//         width: 55,
+//         height: 20,
+//         fontSize: 30,
+//         fontWeight: 'bold',
+//         color: 'white',
+//         backgroundColor: 'inherit',
+//         borderColor: 'inherit',
+//         borderRadius: 20,
+//         borderWidth: 1,
+//         formatter: '{value}%',
+
+//       }
+//     }
+//   ]
+// };
+
+export function optionDonut(title, data) {
+  return {
+    tooltip: {
+      trigger: 'item'
     },
-    detail: {
-      valueAnimation: true,
-      offsetCenter: ['0%', '-20%']
-    }
-  },
-  {
-    value: 40,
-    name: 'Super Meta',
     title: {
-      offsetCenter: ['0%', '0%']
-    },
-    detail: {
-      valueAnimation: true,
-      offsetCenter: ['0%', '10%']
-    }
-  },
-  {
-    value: 60,
-    name: 'Diretoria',
-    title: {
-      offsetCenter: ['0%', '30%']
-    },
-    detail: {
-      valueAnimation: true,
-      offsetCenter: ['0%', '40%']
-    }
-  }
-];
-option = {
-  series: [
-    {
-      type: 'gauge',
-      startAngle: 90,
-      endAngle: -270,
-      pointer: {
-        show: false
-      },
-      progress: {
-        show: true,
-        overlap: false,
-        roundCap: true,
-        clip: false,
-        itemStyle: {
-          borderWidth: 1,
-          borderColor: '#ccc'
-        }
-      },
-      axisLine: {
-        lineStyle: {
-          width: 80
-        }
-      },
-      splitLine: {
-        show: false,
-        distance: 0,
-        length: 10
-      },
-      axisTick: {
-        show: false
-      },
-      axisLabel: {
-        show: false,
-        distance: 50
-      },
-      data: gaugeData,
-      title: {
-        fontSize: 25
-      },
-      detail: {
-        width: 55,
-        height: 20,
-        fontSize: 30,
+      text: title,
+      left: 4,
+      textStyle: {
         fontWeight: 'bold',
-        color: 'white',
-        backgroundColor: 'inherit',
-        borderColor: 'inherit',
-        borderRadius: 20,
-        borderWidth: 1,
-        formatter: '{value}%',
-
+        fontSize: 15,
+        color: 'black'
       }
-    }
-  ]
+    },
+    legend: {
+      bottom: '5%',
+      left: 'center',
+      textStyle: {
+        fontSize: '2vw' // Default base font size
+      }
+    },
+    series: [
+      {
+        type: 'pie',
+        radius: ['40%', '60%'],
+        center: ['50%', '45%'],
+        avoidLabelOverlap: false,
+        label: {
+          show: true,
+          position: 'outside',
+          verticalAlign: 'middle',
+          backgroundColor: 'rgba(241, 237, 241, 0.7)', // Add transparency
+          borderColor: 'grey',
+          // borderWidth: 1,
+          borderRadius: 10,
+          padding: 5,
+          formatter: '{b}: {c}',
+          fontSize: '2vw', // Responsive font size
+          color: 'black',
+          fontWeight: 'bold'
+        },
+        itemStyle: {
+          borderRadius: 4,
+          borderColor: '#fff',
+          borderWidth: 1
+        },
+        labelLine: {
+          show: true
+        },
+        data: data
+      }
+    ]
+  };
 };
-
-export const optionDonut = {
-  tooltip: {
-    trigger: 'item'
-  },
-  legend: {
-    bottom: '5%',
-    left: 'center',
-    textStyle: {
-      fontSize: '2vw' // Default base font size
-    }
-  },
-  series: [
-    {
-      type: 'pie',
-      radius: ['40%', '60%'],
-      center: ['50%', '45%'],
-      avoidLabelOverlap: false,
-      label: {
-        show: true,
-        position: 'outside',
-        verticalAlign: 'middle',
-        backgroundColor: 'rgba(241, 237, 241, 0.7)', // Add transparency
-        borderColor: 'grey',
-        // borderWidth: 1,
-        borderRadius: 10,
-        padding: 5,
-        formatter: '{b}: {c}',
-        fontSize: '2vw', // Responsive font size
-        color: 'black',
-        fontWeight: 'bold'
-      },
-      itemStyle: {
-        borderRadius: 4,
-        borderColor: '#fff',
-        borderWidth: 1
-      },
-      labelLine: {
-        show: true
-      },
-      data: [
-        { value: 1048, name: 'Search Engine' },
-        { value: 735, name: 'Direct' },
-        { value: 580, name: 'Email' },
-        { value: 484, name: 'Union Ads' },
-        { value: 300, name: 'Video Ads' }
-      ]
-    }
-  ]
-};
-

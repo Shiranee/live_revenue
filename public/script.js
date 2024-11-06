@@ -10,9 +10,6 @@ window.startChart = function(chartId, option) {
   }
 };
 
-// startChart(charts[0], echartOptions.optionLine);
-startChart(charts[1], echartOptions.optionDonut);
-
 let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
 let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
   return new bootstrap.Tooltip(tooltipTriggerEl)

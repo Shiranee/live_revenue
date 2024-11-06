@@ -74,6 +74,15 @@ body {
     height: 130px;
     width: 96%;
 }
+
+#table {
+    table-layout: auto;
+    width: 100%;
+}
+
+#table th, #table td {
+    white-space: nowrap;  /* Prevents text wrapping to help with fitting content */
+}
 /* 
 .fs-custom {
     font-size: 0.8rem !important;
