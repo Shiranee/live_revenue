@@ -244,97 +244,72 @@ export function optionBarGauge(title, seriesData) {
   };
 };
 
-// const gaugeData = [
-//   {
-//     value: 20,
-//     name: 'Meta',
-//     title: {
-//       offsetCenter: ['0%', '-30%']
-//     },
-//     detail: {
-//       valueAnimation: true,
-//       offsetCenter: ['0%', '-20%']
-//     }
-//   },
-//   {
-//     value: 40,
-//     name: 'Super Meta',
-//     title: {
-//       offsetCenter: ['0%', '0%']
-//     },
-//     detail: {
-//       valueAnimation: true,
-//       offsetCenter: ['0%', '10%']
-//     }
-//   },
-//   {
-//     value: 60,
-//     name: 'Diretoria',
-//     title: {
-//       offsetCenter: ['0%', '30%']
-//     },
-//     detail: {
-//       valueAnimation: true,
-//       offsetCenter: ['0%', '40%']
-//     }
-//   }
-// ];
-// option = {
-//   series: [
-//     {
-//       type: 'gauge',
-//       startAngle: 90,
-//       endAngle: -270,
-//       pointer: {
-//         show: false
-//       },
-//       progress: {
-//         show: true,
-//         overlap: false,
-//         roundCap: true,
-//         clip: false,
-//         itemStyle: {
-//           borderWidth: 1,
-//           borderColor: '#ccc'
-//         }
-//       },
-//       axisLine: {
-//         lineStyle: {
-//           width: 80
-//         }
-//       },
-//       splitLine: {
-//         show: false,
-//         distance: 0,
-//         length: 10
-//       },
-//       axisTick: {
-//         show: false
-//       },
-//       axisLabel: {
-//         show: false,
-//         distance: 50
-//       },
-//       data: gaugeData,
-//       title: {
-//         fontSize: 25
-//       },
-//       detail: {
-//         width: 55,
-//         height: 20,
-//         fontSize: 30,
-//         fontWeight: 'bold',
-//         color: 'white',
-//         backgroundColor: 'inherit',
-//         borderColor: 'inherit',
-//         borderRadius: 20,
-//         borderWidth: 1,
-//         formatter: '{value}%',
-
-//       }
-//     }
-//   ]
-// };
+export function optionFullGauge(title, seriesData) {
+  return {
+      title: {
+        text: `${title}`,
+        left: 'center',
+        textStyle: {
+          fontWeight: 'bold',
+          fontSize: 15,
+          color: 'black'
+        }
+      },
+      series: [
+        {
+          type: 'gauge',
+          startAngle: 90,
+          endAngle: -270,
+          pointer: {
+            show: false
+          },
+          progress: {
+            show: true,
+            overlap: false,
+            roundCap: true,
+            clip: false,
+            itemStyle: {
+              borderWidth: 1,
+              borderColor: '#ccc'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              width: 40
+            }
+          },
+          splitLine: {
+            show: false,
+            distance: 0,
+            length: 10
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            show: false,
+            distance: 50
+          },
+          data: seriesData,
+          title: {
+            show:false
+          },
+          detail: {
+            width: 55,
+            height: 14,
+            fontSize: 14,
+            fontWeight: 'bold',
+            color: 'white',
+            backgroundColor: 'inherit',
+            borderColor: 'inherit',
+            borderRadius: 20,
+            borderWidth: 1,
+            formatter: '{value}%',
+          }
+        }
+      ]
+    };
+};
 
 export function optionDonut(title, data) {
   return {

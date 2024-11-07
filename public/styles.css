@@ -83,6 +83,10 @@ body {
 #table th, #table td {
     white-space: nowrap;  /* Prevents text wrapping to help with fitting content */
 }
+
+.gauges-height {
+    height: 300px;
+}
 /* 
 .fs-custom {
     font-size: 0.8rem !important;

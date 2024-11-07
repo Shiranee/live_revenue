@@ -7,7 +7,7 @@
             
             <div>
               <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1"> {{ $titleFirst }} <!-- Receita Hoje -->
-              <span class="round-pill fs-c1" data-bs-toggle="tooltip" title="{{ $tooltip }}"> {{ $comparison }} <!-- -6.8% --> </span>
+              <span class="round-pill fs-c1" data-bs-toggle="tooltip" title="{{ $tooltip }}" function="checkNumber"> {{ $comparison }} <!-- -6.8% --> </span>
               </h5>
               <h6 class="text-body-tertiary"> {{ $titleSecond }} <!-- Captado --> </h6>
             </div>
@@ -41,10 +41,10 @@
               }]
 
               if ('{{ $graphId }}' != 'chart-revenue-invoiced') {
-                const chartOptions = echartOptions.optionLine('{{ $titleFirst }}', revenue, period, false);
+                const chartOptions = echartOptions.optionLine('', revenue, period, false);
                 startChart('{{ $graphId }}', chartOptions);
               } else {
-                const gaugeOptions = echartOptions.optionBarGauge('{{ $titleFirst }}', '{{$invoicedShare}}' );
+                const gaugeOptions = echartOptions.optionBarGauge('', '{{$invoicedShare}}' );
                 startChart('{{ $graphId }}', gaugeOptions);
 
               }

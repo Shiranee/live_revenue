@@ -119,6 +119,21 @@ class RevenueService
         }
     }
 
+    public function getGoals($date_start, $date_end)
+    {
+        // Assuming you're using a model like Order for fetching the data, otherwise use DB facade.
+        return DB::table('orders') // Replace 'orders' with your actual table name
+            ->whereBetween('created_at', [$date_start, $date_end]) // Adjust 'created_at' to match your date field
+            ->selectRaw('
+                SUM(price_paid) * 1.2 as goal,
+                SUM(price_paid) * 1.5 as goal_super,
+                SUM(price_paid) * 2 as goal_board
+            ')
+            ->get();
+    }
+    
+
+
     private function validateDates($date_start, $date_end)
     {
         $format = 'Y-m-d';
