@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\RevenueService;
 use App\Services\divergencesService;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -17,8 +18,8 @@ class DashboardController extends Controller
     {
         $this->orderService = $orderService;
         $this->divergencesService = $divergencesService;
-        $this->date_start = '2024-09-01';
-        $this->date_end = '2024-09-30';
+        $this->date_start = '2024-11-01';
+        $this->date_end = '2024-11-30';
     }
     
     public function index()
@@ -175,20 +176,35 @@ class DashboardController extends Controller
         });
 
         $cardData = [
-            'orders' => count($response), // Total number of orders
-            'customers' => collect($response)->pluck('customer_id')->unique()->count(), // Count unique customers
-            'amount' => collect($response)->sum('amount'), // Sum of amounts
+            'orders' => count($response),
+            'customers' => collect($response)->pluck('customer_id')->unique()->count(),
+            'amount' => collect($response)->sum('amount'),
         ];
 
         $divergencesType = collect($response)->groupBy('divergence_type')->map(function ($items, $divergenceType) {
             return [
                 'value' => $items->count(),
-                'name' => $divergenceType // 'Positivas' or 'Negativas'
+                'name' => $divergenceType,
+                'revenue' => 'R$' . number_format(round($items->sum('divergence')), 0, ',', '.')
             ];
         });
 
+        $divergencesHour = collect($response)->groupBy('order_hour')->map(function ($items, $hour) {
+            return [
+                'period' => $hour,
+                'orders' => $items->count()
+            ];
+        })->sortBy('period')->values();
+
+        $divergencesDay = collect($response)->groupBy('order_date')->map(function ($items, $date) {
+            return [
+                'period' => \Carbon\Carbon::parse($date)->format('d/m/Y'), // Convert the date string to a Carbon instance
+                'orders' => $items->count()
+            ];
+        })->values();        
+
         $divergencesTypeGraph = $divergencesType->values();
     
-        return view('dashboards.ordersDivergences', compact('tableData', 'cardData', 'divergencesType', 'divergencesTypeGraph'));
+        return view('dashboards.ordersDivergences', compact('tableData', 'cardData', 'divergencesType', 'divergencesTypeGraph', 'divergencesHour', 'divergencesDay'));
     }    
 }

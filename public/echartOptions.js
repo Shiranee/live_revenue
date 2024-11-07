@@ -1,4 +1,4 @@
-export function optionLine(title, seriesData, xAxisData, showLegends) {
+export function optionLine(title, seriesData, xAxisData, showLegends, formatter) {
   let optionLabels = {
     type: 'line',
     lineStyle: {
@@ -18,7 +18,7 @@ export function optionLine(title, seriesData, xAxisData, showLegends) {
       borderRadius: 10,
       padding: 5,
       formatter: function (params) {
-        return `R$ ${params.value.toFixed(0)}`; // Display currency with no decimals
+        return `${formatter} ${params.value.toFixed(0)}`; // Display currency with no decimals
       }
     }
   };
@@ -38,7 +38,7 @@ export function optionLine(title, seriesData, xAxisData, showLegends) {
       formatter: function (params) {
         let tooltipContent = `${params[0].axisValue}<br/>`;
         params.forEach(item => {
-          tooltipContent += `R$${item.value.toFixed(0)}<br/>`;
+          tooltipContent += `${formatter} ${item.value.toFixed(0)}<br/>`;
         });
         return tooltipContent;
       }

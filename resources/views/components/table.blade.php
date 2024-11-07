@@ -1,4 +1,5 @@
 <!-- resources/views/components/table.blade.php -->
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.5/dist/bootstrap-table.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.29.0/tableExport.min.js"></script>
@@ -7,9 +8,15 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.5/dist/extensions/export/bootstrap-table-export.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.23.5/dist/extensions/auto-resize/bootstrap-table-auto-resize.min.js"></script>
 
+<!-- Toolbar with title -->
+<div id="toolbar">
+    <h5 class="card-title fw-bold mb-1">Pedidos Divergentes</h5>
+</div>
 
+<!-- Your table definition -->
 <table class="fs-c1"
        id="table"
+       data-toolbar="#toolbar" 
        data-toggle="table"
        data-sort-class="table-active"
        data-sortable="true"

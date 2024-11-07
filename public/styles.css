@@ -75,6 +75,11 @@ body {
     width: 96%;
 }
 
+.dashboard-fit {
+    height: 100%;
+    width: 96%;
+}
+
 #table {
     table-layout: auto;
     width: 100%;

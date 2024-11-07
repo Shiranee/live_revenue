@@ -7,7 +7,7 @@
             
             <div>
               <h5 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1"> {{ $titleFirst }} <!-- Receita Hoje -->
-              <span class="round-pill fs-c1" data-bs-toggle="tooltip" title="{{ $tooltip }}" function="checkNumber"> {{ $comparison }} <!-- -6.8% --> </span>
+              <span class="round-pill fs-c1" data-bs-toggle="tooltip" title="{{ $tooltip }}"> {{ $comparison }} <!-- -6.8% --> </span>
               </h5>
               <h6 class="text-body-tertiary"> {{ $titleSecond }} <!-- Captado --> </h6>
             </div>
@@ -24,13 +24,6 @@
 
               let period = seriesData.map(item => item.period);
               let revenue = seriesData.map(item => parseFloat(item.revenue.replace(',', '.')));
-              
-              // let t = {
-              //   revenue : [150, 230, 224, 218, 135, 147, 260],
-              //   period : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-              // }
-
-              console.log(period, revenue);
 
               const gaugeData = [{
                 value: 90,
@@ -41,12 +34,11 @@
               }]
 
               if ('{{ $graphId }}' != 'chart-revenue-invoiced') {
-                const chartOptions = echartOptions.optionLine('', revenue, period, false);
+                const chartOptions = echartOptions.optionLine('{{ $titleFirst }}', revenue, period, false);
                 startChart('{{ $graphId }}', chartOptions);
               } else {
-                const gaugeOptions = echartOptions.optionBarGauge('', '{{$invoicedShare}}' );
+                const gaugeOptions = echartOptions.optionBarGauge('{{ $titleFirst }}', '{{$invoicedShare}}' );
                 startChart('{{ $graphId }}', gaugeOptions);
-
               }
           </script>
 

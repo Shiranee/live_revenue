@@ -35,6 +35,26 @@ function checkNumber() {
 // Run the function when the page loads
 document.addEventListener("DOMContentLoaded", checkNumber);
 
+// Function to initialize and resize all charts
+function resizeCharts() {
+  // Select all chart containers (divs with the 'dashboard-fit' class)
+  const chartContainers = document.querySelectorAll('.my-chart');
+
+  // Loop through each container and resize the chart
+  chartContainers.forEach(function(container) {
+      const chart = echarts.getInstanceByDom(container); // Get the instance of the chart
+      if (chart) {
+          chart.resize(); // Resize the chart
+      }
+  });
+}
+
+// Trigger resize on window resize event
+window.addEventListener('resize', resizeCharts);
+
+// Optionally, call resizeCharts initially in case charts are not loaded correctly initially
+resizeCharts();
+
 const gaugeData = [
   {
     value: 20,

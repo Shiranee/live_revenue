@@ -17,7 +17,7 @@ class divergencesService
                 FROM (
                     SELECT
                         o.order_date::date,
-                        DATE_PART('hour', o.order_date) || ':00:00' AS order_hour,
+                        TO_CHAR(DATE_TRUNC('hour', o.order_date), 'HH24:MI:SS') AS order_hour,
                         oi.order_id,
                         o.customer_id,
                         os.name AS status,
