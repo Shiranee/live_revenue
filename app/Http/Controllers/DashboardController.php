@@ -206,5 +206,9 @@ class DashboardController extends Controller
         $divergencesTypeGraph = $divergencesType->values();
     
         return view('dashboards.ordersDivergences', compact('tableData', 'cardData', 'divergencesType', 'divergencesTypeGraph', 'divergencesHour', 'divergencesDay'));
-    }    
+    }
+
+    public function crmDispatches() {
+        return view('dashboards.crmDispatches');
+    }
 }

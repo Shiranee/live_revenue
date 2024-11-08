@@ -1,13 +1,10 @@
 apps:
   - name: dashboardEcomm
-    script: artisan                   # Specifies the script to run
-    exec_mode: fork                   # Use fork mode
-    interpreter: php                  # Interpreter set to PHP
-    instances: 1                      # Number of instances
-    args:                             
-      - queue:work                    # Queue work argument
-      - --tries=5                     # Retry 5 times on failure
-      - --sleep=1                     # Sleep for 1 second between retries
-    env:
-      HOST: "0.0.0.0"                 # Host
-      PORT: "8030"                    # Port
+    script: artisan                 # Artisan script
+    interpreter: php                # Use PHP as the interpreter
+    exec_mode: fork                 # Fork mode for single instance
+    instances: 1                    # Only one instance
+    args:                           # Arguments to pass to `artisan`
+      - serve
+      - --host=0.0.0.0
+      - --port=8030
