@@ -90,8 +90,3 @@ const gaugeData = [
     }
   }
 ];
-
-const goalGaugeOptions = echartOptions.optionFullGauge('', gaugeData);
-startChart(charts[2], goalGaugeOptions);
-startChart('goal-gauge1', goalGaugeOptions);
-startChart('goal-gauge2', goalGaugeOptions);

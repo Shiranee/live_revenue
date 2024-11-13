@@ -92,15 +92,23 @@ body {
 .gauges-height {
     height: 300px;
 }
-/* 
-.fs-custom {
-    font-size: 0.8rem !important;
+
+.datepicker table tr td.active,
+.datepicker table tr td.active:hover {
+    background-color: #8f8f8f !important;  /* Set background to black */
+    color: #ffffff !important;  /* Set text color to white for contrast */
+    background-image: none !important;  /* Remove any previous background image */
 }
 
-.fs-custom-1 {
-    font-size: 0.75rem !important;
+/* Optionally remove background image from any cell */
+.datepicker table tr td {
+    background-image: none !important;
 }
 
-.fs-t1 {
-    font-size: 1.5rem !important;
-} */
+.w-20 {
+    width: 200px;
+}
+
+.datepicker-dropdown {
+    padding: 5px;
+}

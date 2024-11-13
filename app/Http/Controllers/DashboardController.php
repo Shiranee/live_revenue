@@ -207,8 +207,4 @@ class DashboardController extends Controller
     
         return view('dashboards.ordersDivergences', compact('tableData', 'cardData', 'divergencesType', 'divergencesTypeGraph', 'divergencesHour', 'divergencesDay'));
     }
-
-    public function crmDispatches() {
-        return view('dashboards.crmDispatches');
-    }
 }
