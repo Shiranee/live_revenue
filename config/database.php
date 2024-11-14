@@ -128,19 +128,17 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        'ocomm' => [
+        'oecomm' => [
             'driver' => 'mysql',
-            'url' => env('OCOMM_URL'),
-            'host' => env('OCOMM_HOST', '127.0.0.1'),
-            'port' => env('OCOMM_PORT', '5432'),
-            'database' => env('OCOMM_DATABASE', 'laravel'),
-            'username' => env('OCOMM_USERNAME', 'root'),
-            'password' => env('OCOMM_PASSWORD', ''),
-            'charset' => env('OCOMM_CHARSET', 'utf8'),
+            'url' => env('OECOMM_URL'),
+            'host' => env('OECOMM_HOST', '127.0.0.1'),
+            'port' => env('OECOMM_PORT', '3306'),
+            'database' => env('OECOMM_DATABASE', 'laravel'),
+            'username' => env('OECOMM_USERNAME', 'root'),
+            'password' => env('OECOMM_PASSWORD', ''),
+            'charset' => env('OECOMM_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
-            'search_path' => 'public',
-            'sslmode' => 'prefer',
         ],
 
     ],

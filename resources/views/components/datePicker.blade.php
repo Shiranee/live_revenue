@@ -1,16 +1,15 @@
-    <div class="input-group input-daterange">
-        <form method="GET" action="{{ url()->current() }}" id="dateFilterForm">
-            <div class="input-group input-daterange align-items-center">
-                <span class="input-group-text fw-bold">Período: </span>
-                <input type="text" class="form-control" id="startDate" name="startDate" placeholder="Início">
-                <span class="input-group-text fw-bold">à</span>
-                <input type="text" class="form-control" id="endDate" name="endDate" placeholder="Fim">
-            </div>
-        </form>
-    </div>
+<!-- Inside your datePicker.blade.php -->
+    <form style="width: 400px; margin-right: 20px;;" method="GET" action="{{ url()->current() }}" id="dateFilterForm">
+        <div class="input-group input-daterange align-items-center">
+            <span class="input-group-text fw-bold">Período: </span>
+            <input type="text" class="form-control" id="startDate" name="startDate" placeholder="Início" value="{{ request()->get('startDate') }}">
+            <span class="input-group-text fw-bold">à</span>
+            <input type="text" class="form-control" id="endDate" name="endDate" placeholder="Fim" value="{{ request()->get('endDate') }}">
+        </div>
+    </form>
 
 <script>
-$(document).ready(function() {
+$(document).ready(function(){
     // Calculate default start and end dates
     var today = new Date();
     var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -35,29 +34,10 @@ $(document).ready(function() {
         todayHighlight: true
     });
 
-    // Event: On selecting a start date, move focus to the end date and check if both dates are selected
+    // Event: On selecting a start date, move focus to the end date
     $('#startDate').datepicker()
         .on('changeDate', function(e) {
             $('#endDate').focus(); // Automatically move focus to end date
-            checkAndSubmit();      // Call function to check if both dates are selected
         });
-
-    // Event: On selecting an end date, trigger form submission if both dates are selected
-    $('#endDate').datepicker()
-        .on('changeDate', function(e) {
-            checkAndSubmit();      // Call function to check if both dates are selected
-        });
-
-    // Function to check if both dates are selected and submit the form
-    function checkAndSubmit() {
-        var startDate = $('#startDate').val();
-        var endDate = $('#endDate').val();
-
-        // Ensure both start and end dates are selected
-        if (startDate && endDate) {
-            // If both dates are selected, submit the form automatically
-            $('#dateFilterForm').submit();  // Trigger form submission
-        }
-    }
 });
 </script>

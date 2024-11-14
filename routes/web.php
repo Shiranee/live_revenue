@@ -17,4 +17,5 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/divergences', [DashboardController::class, 'divergencesIndex']);
     Route::get('/dispatches', [crmDispatchesController::class, 'crmDispatchesIndex']);
 });
+
 Route::get('/api/revenue/{start_date}/{end_date}/{operation}/{group?}', [OrderController::class, 'getOrderSummary']);

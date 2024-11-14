@@ -2,33 +2,63 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 use Exception;
 
 class dispatchesService 
 {
-    public function getDispatches($date_start, $date_end, $campaign)
+    public function getCampaigns(): array
     {
-        $queryCampaigns = "
-            SELECT
-                            id
-                        , chave AS name
-                        , tipo AS type
-                        , ativo AS status
+        try {
+            $queryCampaigns = "
+                SELECT
+                    id,
+                    chave AS name,
+                    tipo AS type,
+                    ativo AS status
+                FROM live_db.cashback_twilio_template
+            ";
 
-            FROM live_db.cashback_twilio_template
-        ";
+            return DB::connection('oecomm')->select($queryCampaigns);
+        } catch (Exception $e) {
+            throw new Exception("Error retrieving dispatch data: " . $e->getMessage());
+        }
+    }
 
-        // if ($campaign !== null) {
-        //     $query->where('invoiced', $campaign);
-        // }
+    public function getDispatches($date_start, $date_end, $campaign = null)
+    {
+        try {
+            // Start building the query
+            $queryDispatches = "
+                SELECT
+                                IF(d.source LIKE '%loja%', 'Loja', 'Site') source
+                            , d.template_key
+                            , COUNT(d.id) AS dispatches
+                            , COUNT(CASE WHEN d.sended_at IS NOT NULL AND d.has_error <> 1 THEN d.id END) AS dispatches_confimed
+                            , COUNT(CASE WHEN d.sended_at IS NULL AND d.ready_to_send = 1 AND (dt.ativo = 1) AND d.has_error <> 1 THEN d.id END) AS dispatches_pending
+                            , COUNT(CASE WHEN (dt.ativo <> 1 OR dt.ativo IS NULL) AND d.sended_at IS NULL THEN d.id END) AS dispatches_inactive
+                            , COUNT(CASE WHEN d.has_error = 1 THEN d.id END) AS dispatches_failed
 
-        switch ($campaign) {
-            case 'campaigns':
-                return DB::connection('ocomm')->select($queryCampaigns, [$date_start, $date_end]);
-        
-            default:
-                    throw new Exception('Invalid operation');
+                FROM live_db.customer_queue_notifications d
+                LEFT JOIN live_db.cashback_twilio_template dt ON d.template_key = dt.chave
+                WHERE
+                DATE(d.scheduled_send_date) BETWEEN ? AND ?
+            ";
+    
+            // Add condition for campaign if provided
+            $params = [$date_start, $date_end];
+            if ($campaign !== null) {
+                $queryDispatches .= " AND d.template_key = ?";
+                $params[] = $campaign;
+            }
+    
+            // Add grouping to get count per source and template key
+            $queryDispatches .= " GROUP BY d.source, d.template_key";
+    
+            // Execute the query with parameters
+            return DB::connection('oecomm')->select($queryDispatches, $params);
+        } catch (Exception $e) {
+            throw new Exception("Error retrieving dispatch data: " . $e->getMessage());
         }
     }
 }

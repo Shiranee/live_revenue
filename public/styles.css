@@ -109,6 +109,10 @@ body {
     width: 200px;
 }
 
+.h-5 {
+    height: 50px;
+}
+
 .datepicker-dropdown {
     padding: 5px;
 }
