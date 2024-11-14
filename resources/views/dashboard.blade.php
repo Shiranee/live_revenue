@@ -3,13 +3,17 @@
 <body>
   <header class="header m-shadow">
   </header>
+  <div class="center container-fluid mb-3 d-flex justify-content-start">
+    <div class="d-flex justify-content-start" style="width: 400px;">
+      @include('components.datePicker')
+    </div>
+  </div>
 
   <div class="row center">
     @foreach($cardsRevenue as $cardData)
         @include('components.cardRevenue', $cardData)
     @endforeach
   </div>
-
   
   <div class="row center">
     @foreach($cardsDevolution as $cardData)
