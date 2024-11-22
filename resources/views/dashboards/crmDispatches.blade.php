@@ -1,4 +1,4 @@
-@include('components.head', ['pageName' => 'LIVE! Receita E-commerce'])
+@include('components.head', ['pageName' => 'LIVE! Disparos Twillio'])
 
 <body>
   <header class="header m-shadow">

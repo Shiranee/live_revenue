@@ -7,6 +7,9 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\crmDispatchesController;
 use App\Http\Controllers\revenueController;
+use App\Http\Controllers\AjaxController;
+
+Route::get('/filter-dates', [crmDispatchesController::class, 'filterDates']);
 
 Route::get('/', function () {
     return view('welcome');
