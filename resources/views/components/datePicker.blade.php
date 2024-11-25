@@ -1,4 +1,4 @@
-<form id="dateFilterForm" style="width: 400px; margin-right: 20px;">
+<form id="dateFilterForm" style="width: 400px; margin-right: 20px;" data-route="{{ route('crmDispatches.filter') }}">
     <div class="input-group input-daterange align-items-center">
         <span class="input-group-text fw-bold">Período: </span>
         <input type="text" class="form-control" id="startDate" name="startDate" placeholder="Início" value="{{ request()->get('startDate') }}">
@@ -6,6 +6,7 @@
         <input type="text" class="form-control" id="endDate" name="endDate" placeholder="Fim" value="{{ request()->get('endDate') }}">
     </div>
 </form>
+
 
 <script>
 $(document).ready(function(){
@@ -38,32 +39,5 @@ $(document).ready(function(){
         .on('changeDate', function(e) {
             $('#endDate').focus(); // Automatically move focus to end date
         });
-
-    // Send selected date range via AJAX to the server
-    $('#dateFilterForm').on('change', function(e) {
-        e.preventDefault();
-
-        // Get the start and end dates from the inputs
-        var startDate = $('#startDate').val();
-        var endDate = $('#endDate').val();
-
-        // Send the dates to the backend using AJAX
-        $.ajax({
-            url: '/filter-dates', // Your route for handling date filtering
-            type: 'GET',
-            data: {
-                startDate: startDate,
-                endDate: endDate,
-                _token: '{{ csrf_token() }}' // Include CSRF token for security
-            },
-            success: function(response) {
-                // Handle the response (optional: you can refresh parts of the page)
-                console.log(response);
-            },
-            error: function(xhr, status, error) {
-                console.error("Error sending data: " + error);
-            }
-        });
-    });
 });
 </script>
