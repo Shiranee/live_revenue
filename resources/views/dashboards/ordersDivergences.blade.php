@@ -1,4 +1,4 @@
-@include('components.head', ['pageName' => 'LIVE! Receita E-commerce'])
+@include('components.head', ['pageName' => 'Divergencias De Pagamento'])
 
 <body>
   <header class="header m-shadow">

@@ -34,7 +34,7 @@ class dispatchesService
                                 IF(d.source LIKE '%loja%', 'Loja', 'Site') source
                             , d.template_key
                             , COUNT(d.id) AS dispatches
-                            , COUNT(CASE WHEN d.sended_at IS NOT NULL AND d.has_error <> 1 THEN d.id END) AS dispatches_confimed
+                            , COUNT(CASE WHEN d.sended_at IS NOT NULL AND d.has_error <> 1 THEN d.id END) AS dispatches_confirmed
                             , COUNT(CASE WHEN d.sended_at IS NULL AND d.ready_to_send = 1 AND (dt.ativo = 1) AND d.has_error <> 1 THEN d.id END) AS dispatches_pending
                             , COUNT(CASE WHEN (dt.ativo <> 1 OR dt.ativo IS NULL) AND d.sended_at IS NULL THEN d.id END) AS dispatches_inactive
                             , COUNT(CASE WHEN d.has_error = 1 THEN d.id END) AS dispatches_failed

@@ -13,30 +13,10 @@
   </div>
 
   <div class="row center">
-    <div class="card m-shadow h-100 d-flex flex-column justify-content-between p-3">
-      
-      <div class="d-flex justify-content-between align-items-center mx-4">
-
-        <div>
-          <h3 class="d-flex justify-content-between align-items-center card-title fw-bold mb-1">
-            Disparos                
-          </h3>
-        </div>
-        <h1 class="card-title fw-bold"> 
-          {{ $totalDispatches}}
-        </h1>
-
-      </div>
-      
-      <div class="revenue-dashboard my-chart" id='chart-templates' style="height: 50vh;"></div>
-    </div>
-  </div>
-
-  <!-- @foreach ($dispatches as $dispatch)
-      <tr>
-          <td>{{ $dispatch['dispatches_confimed'] }}</td>
-      </tr>
-  @endforeach -->
+    @for($i = 0; $i < count($totalDispatches); $i++)
+        @include('components.cardDispatches', ['dispatchesData' => $totalDispatches[$i], 'campaignsData' => $totalCampaigns[$i]])
+    @endfor
+</div>
 
 </body>
 </html>
