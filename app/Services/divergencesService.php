@@ -30,8 +30,8 @@ class divergencesService
                         op.value::numeric AS payment_value,
                         (SUM(oi.amount * oi.price) + od.price)::numeric AS itens_value,
                         o.discount_amount::numeric AS order_discount,
-                        (SUM(oi.amount * oi.price) + od.price)::numeric - 
-                            CASE WHEN op.payment_method_id = 39 THEN o.total_amount ELSE op.value END::numeric AS divergence,
+                        - ((SUM(oi.amount * oi.price) + od.price)::numeric - 
+                            CASE WHEN op.payment_method_id = 39 THEN o.total_amount ELSE op.value END::numeric) AS divergence,
                         c.name AS transporter
 
                     FROM orders o

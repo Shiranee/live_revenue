@@ -311,10 +311,13 @@ export function optionFullGauge(title, seriesData) {
     };
 };
 
-export function optionDonut(title, data) {
+export function optionDonut(title, data, showLabel, colors) {
   return {
     tooltip: {
-      trigger: 'item'
+      trigger: 'item',
+      formatter: function (params) {
+        return `${params.name}: ${params.value} - (${Math.round(params.percent)}%)`; // Tooltip with rounded percentage
+      }
     },
     title: {
       text: title,
@@ -339,7 +342,7 @@ export function optionDonut(title, data) {
         center: ['50%', '45%'],
         avoidLabelOverlap: false,
         label: {
-          show: true,
+          show: showLabel,
           position: 'outside',
           verticalAlign: 'middle',
           backgroundColor: 'rgba(241, 237, 241, 0.7)', // Add transparency
@@ -358,7 +361,7 @@ export function optionDonut(title, data) {
           borderWidth: 1
         },
         labelLine: {
-          show: true
+          show: showLabel
         },
         data: data
       }

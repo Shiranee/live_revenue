@@ -57,7 +57,7 @@ class crmDispatchesController extends Controller
                     'total_pending' => $dispatchesCollection->sum('dispatches_pending'),
                     'total_inactive' => $dispatchesCollection->sum('dispatches_inactive'),
                     'total_failed' => $dispatchesCollection->sum('dispatches_failed'),
-                    
+                    'total_campaigns' => [],
                 ]
             ];
 
@@ -76,6 +76,8 @@ class crmDispatchesController extends Controller
                 ->values()
                 ->toArray();
 
+            $totalDispatches[0]['total_campaigns'] = $totalCampaigns;
+
             // Totals filtered by source (e.g., Website, Stores)
             $sources = $dispatchesCollection->pluck('source')->unique();
 
@@ -84,16 +86,29 @@ class crmDispatchesController extends Controller
                 // Filter the dispatches by source once
                 $sourceDispatches = $dispatchesCollection->where('source', $source);
 
-                // Calculate totals for this source
+                $totalConfirmed = $sourceDispatches->sum('dispatches_confirmed'); // Pre-calculate total_confirmed
+
                 $sourceTotals = [
                     'source' => $source,
                     'total' => $sourceDispatches->sum('dispatches'),
-                    'total_confirmed' => $sourceDispatches->sum('dispatches_confirmed'),
+                    'total_confirmed' => $totalConfirmed,
                     'total_pending' => $sourceDispatches->sum('dispatches_pending'),
                     'total_inactive' => $sourceDispatches->sum('dispatches_inactive'),
                     'total_failed' => $sourceDispatches->sum('dispatches_failed'),
+                    'total_campaigns' => $sourceDispatches
+                        ->groupBy('template_key')
+                        ->map(function ($items, $template_key) use ($source, $totalConfirmed) { // Use pre-calculated value
+                            return [
+                                'source' => $source,
+                                'template_key' => $template_key,
+                                'total_confirmed' => $items->sum('dispatches_confirmed'),
+                                'share' => ($totalConfirmed > 0) ? number_format((($items->sum('dispatches_confirmed') / $totalConfirmed) * 100), 0, ',', '.') : 0,
+                            ];
+                        })
+                        ->values()
+                        ->toArray(),
                 ];
-
+                
                 $totalDispatches[] = $sourceTotals;
 
                 // Calculate campaigns for this source
@@ -110,24 +125,21 @@ class crmDispatchesController extends Controller
                     })
                     ->values()
                     ->toArray();
+                
+                $sourceTotals[0]['total_campaigns'] = $sourceCampaigns;
 
                 // Merge source-specific campaigns into the total campaigns list
                 $totalCampaigns = array_merge($totalCampaigns, $sourceCampaigns);
-            }
-
-            $viewData = collect([
-                'totalCampaigns' => $totalCampaigns,
-                'totalDispatches' => $totalDispatches,
-            ])->toJson();            
+            }        
 
             // Handle AJAX request
             if ($request->ajax()) {
                 // Return the view with updated data for AJAX requests
-                return response()->view('dashboards.crmDispatches', compact('campaigns', 'totalCampaigns', 'totalDispatches', 'viewData'));
+                return response()->view('dashboards.crmDispatches', compact('campaigns', 'totalCampaigns', 'totalDispatches'));
             }
 
             // Return the full page view for non-AJAX requests
-            return view('dashboards.crmDispatches', compact('campaigns', 'totalCampaigns', 'totalDispatches', 'viewData'));
+            return view('dashboards.crmDispatches', compact('campaigns', 'totalCampaigns', 'totalDispatches'));
 
         } catch (\Exception $e) {
             logger()->error("Error fetching dispatch data: " . $e->getMessage());
