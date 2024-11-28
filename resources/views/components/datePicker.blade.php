@@ -1,4 +1,4 @@
-<form id="dateFilterForm" style="width: 400px; margin-right: 20px;" data-route="{{ route('crmDispatches.filter') }}">
+<form id="dateFilterForm" style="width: 400px" data-route="{{ route('crmDispatches.filter') }}">
     <div class="input-group input-daterange align-items-center">
         <span class="input-group-text fw-bold">Período: </span>
         <input type="text" class="form-control" id="startDate" name="startDate" placeholder="Início" value="{{ request()->get('startDate') }}">

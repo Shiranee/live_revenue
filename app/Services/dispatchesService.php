@@ -32,7 +32,11 @@ class dispatchesService
             $queryDispatches = "
                 SELECT
                                 IF(d.source LIKE '%loja%', 'Loja', 'Site') source
-                            , d.template_key
+                            , CASE
+                                    WHEN UPPER(source) LIKE '%UTILITY%' THEN 'UTILITY'
+                                    WHEN UPPER(SOURCE) LIKE '%MARKET%' THEN 'MARKETING'
+                              END AS dispatch_modality
+                            , TRIM(REGEXP_REPLACE(d.template_key, 'cta|[^A-Za-z]', ' ')) AS template_key
                             , COUNT(d.id) AS dispatches
                             , COUNT(CASE WHEN d.sended_at IS NOT NULL AND d.has_error <> 1 THEN d.id END) AS dispatches_confirmed
                             , COUNT(CASE WHEN d.sended_at IS NULL AND d.ready_to_send = 1 AND (dt.ativo = 1) AND d.has_error <> 1 THEN d.id END) AS dispatches_pending
@@ -53,7 +57,16 @@ class dispatchesService
             }
     
             // Add grouping to get count per source and template key
-            $queryDispatches .= " GROUP BY d.source, d.template_key";
+            $queryDispatches .= "
+                GROUP BY
+                    IF(d.source LIKE '%loja%', 'Loja', 'Site'),
+                    CASE
+                        WHEN UPPER(d.source) LIKE '%UTILITY%' THEN 'UTILITY'
+                        WHEN UPPER(d.source) LIKE '%MARKET%' THEN 'MARKETING'
+                    END,
+                    d.template_key,
+                    d.source
+            ";
     
             // Execute the query with parameters
             return DB::connection('oecomm')->select($queryDispatches, $params);
