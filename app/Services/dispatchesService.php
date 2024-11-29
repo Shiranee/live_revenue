@@ -47,7 +47,7 @@ class dispatchesService
                 FROM live_db.customer_queue_notifications d
                 LEFT JOIN live_db.cashback_twilio_template dt ON d.template_key = dt.chave
                 WHERE
-                DATE(d.scheduled_send_date) BETWEEN ? AND ?
+                DATE(d.sended_at) BETWEEN ? AND ?
             ";
     
             // Add condition for campaign if provided
