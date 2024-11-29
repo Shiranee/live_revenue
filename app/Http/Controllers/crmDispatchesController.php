@@ -20,11 +20,11 @@ class crmDispatchesController extends Controller
     {
         try {
             // Get dates from the request (fallback to default range if not provided)
-            $startDate = $request->get('startDate', '2024-11-01');
-            $endDate = $request->get('endDate', '2024-11-10');
+            // $startDate = $request->get('startDate', '2024-11-01');
+            // $endDate = $request->get('endDate', '2024-11-10');
 
-            // $startDate = $request->get('startDate', now()->startOfMonth()->toDateString());
-            // $endDate = $request->get('endDate', now()->endOfMonth()->toDateString());
+            $startDate = $request->get('startDate', now()->startOfMonth()->toDateString());
+            $endDate = $request->get('endDate', now()->endOfMonth()->toDateString());
             
             // Fetch data based on dates
             $responseCampaigns = $this->dispatchesService->getCampaigns();
