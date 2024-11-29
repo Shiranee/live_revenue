@@ -1,7 +1,7 @@
 <div class="col-12 col-md-6 col-lg-4">
     <div class="card mb-3 m-shadow">
         <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mx-4">
+            <div class="d-flex justify-content-between align-items-center mx-2">
                 <div>
                     <h3 class="card-title fw-bold mb-1 fs-t1">
                         Disparos {{ $dispatchesData['source'] }}
@@ -15,7 +15,7 @@
 
             <div class="revenue-dashboard my-chart dashboard-fit" 
                  id="chart-campaigns-{{ $dispatchesData['source'] }}" 
-                 style="height: 50vh;"></div>
+                 style="height: 50vh; width: 100%;"></div>
 
             <div class="container text-center fs-c1 table-responsive mt-1">
                 <table class="table">
@@ -41,6 +41,47 @@
             </div>
         </div>
     </div>
+
+    <div class="card mb-3 m-shadow h-20">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mx-2">
+                <div>
+                    <h6 class="card-title fw-bold mb-1 fs-t2">
+                        Disparos Por Modalidade {{ $dispatchesData['source'] }}
+                    </h6>
+                </div>
+            </div>
+
+            <div class="container text-center fs-c2 table-responsive mt-1" style="overflow-x: auto;">
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Modalidade</th>
+                            <th>Confirmados</th>
+                            <th>Pendentes</th>
+                            <th>Inativados</th>
+                            <th>Falhos</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach($dispatchesData['dispatch_modality'] as $item)
+                            <tr>
+                                <td> {{ $item['dispatch_modality'] }} </td>
+                                <td> {{ $item['total_confirmed'] }} </td>
+                                <td> {{ $item['total_pending'] }} </td>
+                                <td> {{ $item['total_inactive'] }} </td>
+                                <td> {{ $item['total_failed'] }} </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 <script type="module">

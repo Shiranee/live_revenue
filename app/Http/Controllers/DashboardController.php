@@ -181,7 +181,7 @@ class DashboardController extends Controller
             'amount' => collect($response)->sum('amount'),
         ];
 
-        $divergencesType = collect($response)->groupBy('divergence_type')->map(function ($items, $divergenceType) {
+        $divergencesType = collect($response)->groupBy('payment')->map(function ($items, $divergenceType) {
             return [
                 'value' => $items->count(),
                 'name' => $divergenceType,
@@ -201,7 +201,7 @@ class DashboardController extends Controller
                 'period' => \Carbon\Carbon::parse($date)->format('d/m/Y'), // Convert the date string to a Carbon instance
                 'orders' => $items->count()
             ];
-        })->values();        
+        })->values();
 
         $divergencesTypeGraph = $divergencesType->values();
     

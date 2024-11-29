@@ -1,7 +1,7 @@
 let debounceTimeout;
 let lastDates = []; // Array to store the date pairs
 
-$('#dateFilterForm').on('focusout', function (e) {
+$('#endDate').on('focusout', function (e) {
     e.preventDefault();
 
     // Get the current values of the date fields
@@ -51,7 +51,7 @@ $('#dateFilterForm').on('focusout', function (e) {
 
         // Clear the lastDates array to reset after sending the final request
         lastDates = [];
-    }, 2000); // Debounce delay (500ms)
+    }, 500); // Debounce delay (500ms)
 });
 
 function formatDateForBackend(dateString) {

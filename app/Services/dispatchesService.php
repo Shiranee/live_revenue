@@ -31,10 +31,11 @@ class dispatchesService
             // Start building the query
             $queryDispatches = "
                 SELECT
-                                IF(d.source LIKE '%loja%', 'Loja', 'Site') source
+                              IF(d.source LIKE '%loja%', 'Loja', 'Site') source
                             , CASE
-                                    WHEN UPPER(source) LIKE '%UTILITY%' THEN 'UTILITY'
-                                    WHEN UPPER(SOURCE) LIKE '%MARKET%' THEN 'MARKETING'
+                                    WHEN UPPER(source) LIKE '%UTILITY%' THEN 'Utility'
+                                    WHEN UPPER(SOURCE) LIKE '%MARKET%' THEN 'Marketing'
+                                    ELSE 'Utility'
                               END AS dispatch_modality
                             , TRIM(REGEXP_REPLACE(d.template_key, 'cta|[^A-Za-z]', ' ')) AS template_key
                             , COUNT(d.id) AS dispatches

@@ -37,6 +37,10 @@ body {
     font-size: clamp(0.85rem, 0.075rem + 0.7vw, 1.1rem) !important;
 }
 
+.fs-c2 {
+    font-size: clamp(0.80rem, 0.070rem + 0.6vw, 1rem) !important;
+}
+
 .fs-t1 {
    font-size: clamp(1.5rem, 0.7rem + 1vw, 1.5rem) !important;
 }
@@ -47,6 +51,10 @@ body {
 
 .h-49 {
     height: 49%;
+}
+
+.h-20 {
+    height: 180px;
 }
 
 .center {

@@ -22,6 +22,9 @@ class crmDispatchesController extends Controller
             // Get dates from the request (fallback to default range if not provided)
             $startDate = $request->get('startDate', '2024-11-01');
             $endDate = $request->get('endDate', '2024-11-10');
+
+            // $startDate = $request->get('startDate', now()->startOfMonth()->toDateString());
+            // $endDate = $request->get('endDate', now()->endOfMonth()->toDateString());
             
             // Fetch data based on dates
             $responseCampaigns = $this->dispatchesService->getCampaigns();
@@ -88,6 +91,9 @@ class crmDispatchesController extends Controller
                     'source' => 'Total',
                     'dispatch_modality' => $dispatch_modality,
                     'total_confirmed' => $items->sum('dispatches_confirmed'),
+                    'total_pending' => $items->sum('dispatches_pending'),
+                    'total_inactive' => $items->sum('dispatches_inactive'),
+                    'total_failed' => $items->sum('dispatches_failed'),
                     'share' => ($totalConfirmed > 0) ? number_format((($items->sum('dispatches_confirmed') / $totalConfirmed) * 100), 0, ',', '.') : 0,
                 ];
             })
@@ -115,6 +121,9 @@ class crmDispatchesController extends Controller
                                 'source' => $source,
                                 'dispatch_modality' => $dispatch_modality,
                                 'total_confirmed' => $items->sum('dispatches_confirmed'),
+                                'total_pending' => $items->sum('dispatches_pending'),
+                                'total_inactive' => $items->sum('dispatches_inactive'),
+                                'total_failed' => $items->sum('dispatches_failed'),
                                 'share' => ($totalConfirmed > 0) ? number_format((($items->sum('dispatches_confirmed') / $totalConfirmed) * 100), 0, ',', '.') : 0,
                             ];
                         })
