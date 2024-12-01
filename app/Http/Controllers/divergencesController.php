@@ -7,7 +7,7 @@ use App\Services\RevenueService;
 use App\Services\divergencesService;
 use Carbon\Carbon;
 
-class DashboardController extends Controller
+class divergencesController extends Controller
 {
     protected $orderService;
     protected $divergencesService;
