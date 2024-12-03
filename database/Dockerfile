@@ -2,7 +2,7 @@
 FROM postgres:15
 
 # Set environment variables for database configuration
-ENV POSTGRES_DB=my_database
+ENV POSTGRES_DB=public
 ENV POSTGRES_USER=admin
 ENV POSTGRES_PASSWORD=12345678
 
