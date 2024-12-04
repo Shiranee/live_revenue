@@ -1,31 +1,34 @@
-# Use the official PHP image as the base
-FROM php:8.1-fpm
+# Use the PHP image with extensions for Laravel
+FROM php:8.2-fpm
 
-# Set working directory
-WORKDIR /var/www
-
-# Install dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    libzip-dev \
+    git \
+    curl \
+    libpq-dev \
     unzip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install gd pdo pdo_mysql zip
+    zip
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_pgsql
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
-# Copy existing application directory contents
-COPY . /var/www
+# Set working directory
+WORKDIR /var/www/html
 
-# Set permissions for Laravel
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage
+# Copy Laravel app
+COPY . .
 
-# Expose port 9000 and start php-fpm server
-EXPOSE 9000
-CMD ["php-fpm"]
+# Install Laravel dependencies
+RUN composer install --no-dev --optimize-autoloader
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html
+
+# Expose port
+EXPOSE 8000
+
+# Start PHP-FPM
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
