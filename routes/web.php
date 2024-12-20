@@ -7,6 +7,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\divergencesController;
 use App\Http\Controllers\crmDispatchesController;
 use App\Http\Controllers\revenueController;
+use App\Http\Controllers\conciliationController;
 use App\Http\Controllers\AjaxController;
 
 Route::get('/crm-dispatches/filter', [crmDispatchesController::class, 'crmDispatchesIndex'])->name('crmDispatches.filter');
@@ -19,4 +20,5 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/revenue', [revenueController::class, 'revenueIndex']);
     Route::get('/divergences', [divergencesController::class, 'divergencesIndex']);
     Route::get('/dispatches', [crmDispatchesController::class, 'crmDispatchesIndex']);
+    Route::get('/conciliation', [conciliationController::class, 'conciliationIndex']);
 });

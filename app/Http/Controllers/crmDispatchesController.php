@@ -19,10 +19,6 @@ class crmDispatchesController extends Controller
     public function crmDispatchesIndex(Request $request)
     {
         try {
-            // Get dates from the request (fallback to default range if not provided)
-            // $startDate = $request->get('startDate', '2024-11-01');
-            // $endDate = $request->get('endDate', '2024-11-10');
-
             $startDate = $request->get('startDate', now()->startOfMonth()->toDateString());
             $endDate = $request->get('endDate', now()->endOfMonth()->toDateString());
             
@@ -173,8 +169,6 @@ class crmDispatchesController extends Controller
 
             // Handle AJAX request
             if ($request->ajax()) {
-                // Return the view with updated data for AJAX requests
-                // return response()->view('dashboards.crmDispatches', compact('campaigns', 'totalCampaigns', 'totalDispatches'));
                 $html = '';
                 foreach ($totalDispatches as $dispatchesData) {
                     $html .= view('components.cardDispatches', compact('dispatchesData'))->render();
