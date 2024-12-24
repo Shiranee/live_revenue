@@ -29,6 +29,8 @@ class conciliationController extends Controller
             // Extract the "data" array
             $conciliationData = $responseConciliation['data'] ?? [];
 
+            // dd($conciliationData);
+
             // // Handle AJAX request
             // if ($request->ajax()) {
             //     // Return the view with updated data for AJAX requests
@@ -42,7 +44,7 @@ class conciliationController extends Controller
             // }
 
             // Return the full page view for non-AJAX requests
-            return view('dashboards.revenueConciliation', compact('responseConciliation'));
+            return view('dashboards.revenueConciliation', compact('conciliationData'));
 
         } catch (\Exception $e) {
             logger()->error("Error fetching dispatch data: " . $e->getMessage());
