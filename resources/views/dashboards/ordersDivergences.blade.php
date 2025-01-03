@@ -116,6 +116,8 @@
         // Initialize chart for each element
         startChart(elementId, chartOptions);
     });
+
+    console.log(seriesData)
 </script>
 
 </body>

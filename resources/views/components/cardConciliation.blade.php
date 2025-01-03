@@ -3,7 +3,7 @@
 @endphp
 
 <div class="col-12 col-md-6 col-lg-4">
-    <div class="card mb-3 m-shadow">
+    <div class="card m-shadow">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mx-2">
                 <div>
@@ -58,6 +58,6 @@
     }));
 
     // Use the processed data for your chart
-    const campaignsChart = echartOptions.optionDonut('', campaignsData);
+    const campaignsChart = echartOptions.optionDonut('{{ $data['operations']['name'] }}', campaignsData);
     startChart('chart-campaigns-{{ Str::slug($data['operations']['name']) }}', campaignsChart);
 </script>

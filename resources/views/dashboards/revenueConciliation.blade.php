@@ -1,3 +1,10 @@
+@php
+    $contents = [
+        'titles' => ['Hoje', 'Acumulada', 'Faturada'],
+        'subTitles' => ['Captado', 'Líquido', 'Líquido'],
+    ];
+@endphp
+
 @include('components.head', ['pageName' => 'Conciliador E-commerce'])
 
 <header class="header m-shadow">
@@ -17,24 +24,47 @@
         @endforeach
     </div>
 
-    <div class="col d-flex flex-column h-100 justify-content-between">
+    <div class="center p-2">
 
-      <div class="card m-shadow h-49 p-3 mx-1 d-flex justify-content-between align-items-center">
-            <div class="d-flex justify-content-between align-items-center w-100">
-              <div>
-                <h5 class="card-title fw-bold mb-1">Divergências Por Hora</h5>
-                <h5 class="text-body-tertiary fs-c">Horários em que ocorreram pedidos com divergência</h5>
-              </div>
-            </div>
-        <div class="dashboard-fit my-chart" id='divergences-hour'></div>
-      </div>
-    
+        @include('components.cardLineGraph', ['title' => 'Captado x Faturado', 'subtitle' => 'Receita Dia a Dia', 'id' => 'captado-dia'])
+
     </div>
 
 </body>
 
-    <script>
-        console.log(@json($conciliationData));
-    </script>
+<script type="module">
+    import * as echartOptions from "{{ asset('echartOptions.js') }}";
+
+    // Assuming $conciliationData is passed correctly as a JSON object
+    let data = @json($conciliationData);
+
+    // Map data to extract periods and orders
+    const seriesData = data.map(item => {
+        const period = item.period.date; // Dates from period
+        const orders = item.period.value; // Revenue from period
+
+        return {
+            period,
+            orders
+        };
+    });
+
+    const chartOptions = echartOptions.optionLine('', [199933.7, 455249.87, 269422.89], ['2025-01-01', '2025-01-02', '2025-01-03'], true, '');
+
+    // Initialize chart for the fixed element ID 'divergences-hour'
+    startChart('captado-dia', chartOptions);
+
+    console.log(seriesData[0].orders, seriesData[0].period);
+
+    // // Generate charts for each data object
+    // seriesData.forEach(({ period, orders }) => {
+    //     // Configure chart options
+    //     const chartOptions = echartOptions.optionLine('Period vs Revenue', orders, period, true, '');
+
+    //     // Initialize chart for the fixed element ID 'divergences-hour'
+    //     startChart('divergences-hour', chartOptions);
+    // });
+
+</script>
 
 </html>
