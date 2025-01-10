@@ -7,13 +7,13 @@
 
 <div class="row center mb-3 d-flex align-items-center mx-2">
     <div class="col">
-        @include('components.dropdownFilter', ['dropdownContent' => $campaigns, 'title' => 'Campanhas', 'id' => 'campaigns'])
+        @include('components.dropdownFilter', ['dropdownContent' => $campaigns, 'title' => 'Campanhas', 'id' => 'campaigns', 'isMultiple' => true])
     </div>
     <div class="col">
-        @include('components.dropdownFilter', ['dropdownContent' => ['Loja', 'E-commerce'], 'title' => 'Canal', 'id' => 'types'])
+        @include('components.dropdownFilter', ['dropdownContent' => ['Loja', 'E-commerce'], 'title' => 'Canal', 'id' => 'types', 'isMultiple' => true])
     </div>
     <div class="col">
-        @include('components.dropdownFilter', ['dropdownContent' => ['Query', 'Csv'], 'title' => 'Metodo de Importação', 'id' => 'import'])
+        @include('components.dropdownFilter', ['dropdownContent' => ['Query', 'Csv'], 'title' => 'Metodo de Importação', 'id' => 'import', 'isMultiple' => false])
     </div>
 </div>
 

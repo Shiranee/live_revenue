@@ -91,24 +91,11 @@ const gaugeData = [
   }
 ];
 
-// var $jq = jQuery.noConflict();
-// $jq(document).ready(function() {
-//     $jq('#table').bootstrapTable({
-//         data: tableData,
-//         autoResize: true,
-//         exportOptions: {
-//             fileName: 'table_data',
-//             ignoreColumn: ['actions'],
-//         },
-//         formatNoMatches: function () {
-//             return 'No data available';
-//         }
-//     });
-// });
-
 document.addEventListener('DOMContentLoaded', () => {
   const queryForm = document.querySelector('#form-query');
+  const queryText = document.querySelector('#list-query');
   const fileForm = document.querySelector('#form-file');
+  const fileInput = document.querySelector('#formFileLg');
   const importForm = document.querySelector('#import-container');
   const importMenuButton = document.querySelector('#importMenuButton');
   const checkboxes = document.querySelectorAll('.item-checkbox[data-id="import"]');
@@ -126,7 +113,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Function to handle the visibility of forms based on checkbox selection
-  function handleCheckboxChange() {
+  function handleCheckboxChange(event) {
+    // Uncheck all other checkboxes in the group
+    checkboxes.forEach((checkbox) => {
+      if (checkbox !== event.target) {
+        checkbox.checked = false;
+      }
+    });
+
     let selectedValue = null;
 
     // Find the first checked checkbox
@@ -145,27 +139,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (selectedValue === 'Query') {
         queryForm.classList.remove('hidden'); // Show Query form
+        fileInput.value = ''; // Clear file input
       } else if (selectedValue === 'Csv') {
         fileForm.classList.remove('hidden'); // Show CSV form
+        queryText.value = ''; // Clear query text
       }
     }
+
+    // Update the dropdown button text
+    importMenuButton.textContent = selectedValue || 'Metodo de Importação';
   }
 
   // Attach change event listener to all checkboxes
   checkboxes.forEach((checkbox) => {
     checkbox.addEventListener('change', handleCheckboxChange);
-  });
-
-  // Optional: Update dropdown button text based on selection
-  $(document).on('change', '.item-checkbox[data-id="import"]', function () {
-    const selectedItems = Array.from(checkboxes)
-      .filter((checkbox) => checkbox.checked)
-      .map((checkbox) => checkbox.value);
-
-    if (selectedItems.length > 0) {
-      importMenuButton.textContent = selectedItems.join(', ');
-    } else {
-      importMenuButton.textContent = 'Metodo de Importação';
-    }
   });
 });

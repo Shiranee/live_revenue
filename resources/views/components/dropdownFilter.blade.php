@@ -9,7 +9,8 @@
       @foreach ($dropdownContent as $item)
         <li>
           <label class="dropdown-item">
-            <input type="checkbox" class="item-checkbox" data-id="{{ $id }}" value="{{ $item }}"> {{ $item }}
+            <input type="{{ $isMultiple ? 'checkbox' : 'radio' }}" class="item-checkbox" data-id="{{ $id }}" value="{{ $item }}">
+            {{ $item }}
           </label>
         </li>
       @endforeach
@@ -27,15 +28,24 @@
       });
     });
 
-    // Handle checkbox selection
+    // Handle checkbox or radio selection
     let selectedItems{{ $id }} = [];
     $(document).on('change', '.item-checkbox[data-id="{{ $id }}"]', function() {
       const value = $(this).val();
 
-      if ($(this).is(':checked')) {
-        selectedItems{{ $id }}.push(value);
+      // If multiple selection is allowed
+      if ({{ $isMultiple ? 'true' : 'false' }}) {
+        if ($(this).is(':checked')) {
+          selectedItems{{ $id }}.push(value);
+        } else {
+          selectedItems{{ $id }} = selectedItems{{ $id }}.filter(item => item !== value);
+        }
       } else {
-        selectedItems{{ $id }} = selectedItems{{ $id }}.filter(item => item !== value);
+        // For single selection (radio behavior)
+        selectedItems{{ $id }} = [value];
+        // Uncheck all other checkboxes
+        $('.item-checkbox[data-id="{{ $id }}"]').prop('checked', false);
+        $(this).prop('checked', true);
       }
 
       // Update button text with selected items or placeholder
