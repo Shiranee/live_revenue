@@ -90,3 +90,59 @@ const gaugeData = [
     }
   }
 ];
+
+// var $jq = jQuery.noConflict();
+// $jq(document).ready(function() {
+//     $jq('#table').bootstrapTable({
+//         data: tableData,
+//         autoResize: true,
+//         exportOptions: {
+//             fileName: 'table_data',
+//             ignoreColumn: ['actions'],
+//         },
+//         formatNoMatches: function () {
+//             return 'No data available';
+//         }
+//     });
+// });
+
+// Function to capture the selected values
+function getSelectedValues() {
+  // Get all checkboxes inside the dropdown
+  const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+  // Create an array of selected values
+  const selectedValues = Array.from(checkboxes).map(checkbox => checkbox.value);
+  
+  console.log(selectedValues);  // Log selected values to console
+}
+
+// Add event listeners to track changes on checkboxes
+document.querySelectorAll('.item-checkbox').forEach(checkbox => {
+  checkbox.addEventListener('change', getSelectedValues);
+});
+
+
+function modalAction(button, modal) {
+  if (!button || !modal) return;  // Check if button and modal exist
+
+  const openModal = function () {
+    modal.classList.remove('hidden');
+    overlay.classList.remove('hidden');
+  };
+
+  const closeModal = function () {
+    modal.classList.add('hidden');
+    overlay.classList.add('hidden');
+  };
+
+  button.addEventListener('click', openModal);
+
+  modal.querySelector('.close-modal').addEventListener('click', closeModal);
+  overlay.addEventListener('click', closeModal);
+  
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+}

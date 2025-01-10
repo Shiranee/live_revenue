@@ -41,20 +41,20 @@
     // Map data to extract periods and orders
     const seriesData = data.map(item => {
         const period = item.period.date; // Dates from period
-        const orders = item.period.value; // Revenue from period
+        const value = item.period.value; // Revenue from period
 
         return {
             period,
-            orders
+            value
         };
     });
 
-    const chartOptions = echartOptions.optionLine('', [199933.7, 455249.87, 269422.89], ['2025-01-01', '2025-01-02', '2025-01-03'], true, '');
+    const chartOptions = echartOptions.optionLine('', seriesData[0].value, seriesData[0].period, true, 'R$');
 
     // Initialize chart for the fixed element ID 'divergences-hour'
     startChart('captado-dia', chartOptions);
 
-    console.log(seriesData[0].orders, seriesData[0].period);
+    console.log(seriesData[0].value, seriesData[0].period);
 
     // // Generate charts for each data object
     // seriesData.forEach(({ period, orders }) => {

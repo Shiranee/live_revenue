@@ -8,7 +8,7 @@ use App\Http\Controllers\divergencesController;
 use App\Http\Controllers\crmDispatchesController;
 use App\Http\Controllers\revenueController;
 use App\Http\Controllers\conciliationController;
-use App\Http\Controllers\AjaxController;
+use App\Http\Controllers\crmImportsController;
 
 Route::get('/crm-dispatches/filter', [crmDispatchesController::class, 'crmDispatchesIndex'])->name('crmDispatches.filter');
 
@@ -16,9 +16,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('dashboard')->group(function () {
+Route::prefix('dashboard')->middleware('web')->group(function () {
     Route::get('/revenue', [revenueController::class, 'revenueIndex']);
     Route::get('/divergences', [divergencesController::class, 'divergencesIndex']);
     Route::get('/dispatches', [crmDispatchesController::class, 'crmDispatchesIndex']);
+    Route::get('/dispatchesImport', [crmImportsController::class, 'crmImportsIndex']);
+    Route::post('/dispatchesImport/actions', [crmImportsController::class, 'handleActions'])->name('dispatchesImport.actions');
     Route::get('/conciliation', [conciliationController::class, 'conciliationIndex']);
 });

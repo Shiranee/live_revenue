@@ -83,13 +83,13 @@
 
   </div>
   
-  <div class="row center mb-5">
-    <div class="col">
-      <div class="card p-3 m-shadow">
-        @include('components.table',  ['tableData' => $tableData])
-      </div>
+<div class="row center mb-5">
+  <div class="col">
+    <div class="card p-3 m-shadow">
+      @include('components.table',  ['tableData' => $tableData])
     </div>
   </div>
+</div>
 
 <script type="module">
     import * as echartOptions from "{{ asset('echartOptions.js') }}";

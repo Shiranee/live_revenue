@@ -50,5 +50,10 @@ networks:
 volumes:
   postgres_data:
 
+# docker-compose build
+# docker-compose up
+
 # home image:
 # sha256:4075adcf8dcf3db54f8c790617d1c8f2391d3bba76b379e59a3183d452181f3d
+
+# w image:

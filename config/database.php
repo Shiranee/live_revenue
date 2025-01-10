@@ -141,6 +141,19 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'connCRM' => [
+            'driver' => 'mysql',
+            'url' => env('CRM_URL'),
+            'host' => env('CRM_HOST', '127.0.0.1'),
+            'port' => env('CRM_PORT', '3306'),
+            'database' => env('CRM_DATABASE', 'laravel'),
+            'username' => env('CRM_USERNAME', 'root'),
+            'password' => env('CRM_PASSWORD', ''),
+            'charset' => env('CRM_CHARSET', 'utf8'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
     ],
 
     /*

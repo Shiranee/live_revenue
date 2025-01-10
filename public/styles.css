@@ -124,3 +124,16 @@ body {
 .datepicker-dropdown {
     padding: 5px;
 }
+
+/* Custom width and scroll behavior for dropdown */
+.dropdown-menu {
+    width: 20vw; /* 1/3 of the viewport width */
+    min-height: 10vh;
+    max-height: 100%; /* Limit height to make it scrollable */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Enable vertical scrolling */
+}
+
+.hidden {
+    display: none;
+}

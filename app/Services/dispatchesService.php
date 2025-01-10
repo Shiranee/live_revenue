@@ -16,10 +16,40 @@ class dispatchesService
                     chave AS name,
                     tipo AS type,
                     ativo AS status
+
                 FROM live_db.cashback_twilio_template
+
+                ORDER BY created_at DESC
             ";
 
             return DB::connection('oecomm')->select($queryCampaigns);
+        } catch (Exception $e) {
+            throw new Exception("Error retrieving dispatch data: " . $e->getMessage());
+        }
+    }
+
+    public function getQueryPreview($query): array
+    {
+        try {
+
+            if (stripos($query, 'DROP') !== false || stripos($query, 'DELETE') !== false || stripos($query, 'UPDATE') !== false) {
+                throw new Exception("Invalid query detected.");
+            }
+
+            $query = "SELECT * FROM (" . $query . ') a LIMIT 200';
+
+						$results = DB::connection('connCRM')->select($query);
+
+						// Get column names
+						$columnNames = [];
+						if (!empty($results)) {
+								$columnNames = array_keys((array) $results[0]); // First row contains the column names
+						}
+		
+						return [
+								'columns' => $columnNames,
+								'data'    => $results,
+						];
         } catch (Exception $e) {
             throw new Exception("Error retrieving dispatch data: " . $e->getMessage());
         }

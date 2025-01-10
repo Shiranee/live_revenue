@@ -12,7 +12,7 @@
                 </div>
             </div>
 
-            <div class="dashboard-fit my-chart" id='{{ $id }}'></div>
+            <div class="revenue-dashboard" id="{{ $id }}"></div>
             
         </div>
     

@@ -22,7 +22,16 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pt-BR.min.js"></script>
+	<script src="https://unpkg.com/htmx.org"></script>
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 
+	<script>
+			document.addEventListener('htmx:configRequest', (event) => {
+					const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+					event.detail.headers['X-CSRF-TOKEN'] = csrfToken;
+			});
+	</script>
+	
 	<!-- Custom CSS and JavaScript -->
 	<link href="{{ asset('styles.css') }}" rel="stylesheet">
 	<script src="{{ asset('script.js') }}" type="module" defer></script>
