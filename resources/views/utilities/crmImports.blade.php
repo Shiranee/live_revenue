@@ -17,21 +17,23 @@
     </div>
 </div>
 
-<div class="row center mb-3">
+<div class="row center mb-3 hidden" id="import-container">
 <div class="col">
 	<div class="card p-3 m-shadow">
-    <div class="mb-3 w-50">
-        <label for="formFileLg" class="form-label"></label>
-        <input class="form-control form-control-lg" id="formFileLg" type="file">
-    </div>
 
-    <div class="mb-4">
-        <label class="form-label">Query</label>
-        <textarea class="form-control" id="list-query" name="listQuery" rows="10"></textarea>
+		<div class="mb-4 hidden" id="form-query">
+			<label class="form-label">Query</label>
+			<textarea class="form-control" id="list-query" name="listQuery" rows="10"></textarea>
+		</div>
+    
+		<div class="mb-3 w-50 hidden" id="form-file">
+			<label for="formFileLg" class="form-label"></label>
+			<input class="form-control form-control-lg" id="formFileLg" type="file">
     </div>
 
     <div>
-        <div class="col-auto">
+
+				<div class="col-auto d-flex justify-content-evenly">
 					<button id="preview" 
 									type="button" 
 									class="btn btn-primary mb-3"
@@ -42,9 +44,10 @@
 							Preview da Base
 					</button>
 
-					<button id="send-data-button" type="submit" class="btn btn-primary mb-3">Enviar</button>
+					<button id="send-data-button" type="submit" class="btn btn-primary mb-3">Enviar Lista</button>
         </div>
-    	</div>
+
+    </div>
 
 		</div>
 	</div>

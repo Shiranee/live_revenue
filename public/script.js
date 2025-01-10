@@ -106,43 +106,66 @@ const gaugeData = [
 //     });
 // });
 
-// Function to capture the selected values
-function getSelectedValues() {
-  // Get all checkboxes inside the dropdown
-  const checkboxes = document.querySelectorAll('.item-checkbox:checked');
-  // Create an array of selected values
-  const selectedValues = Array.from(checkboxes).map(checkbox => checkbox.value);
-  
-  console.log(selectedValues);  // Log selected values to console
-}
+document.addEventListener('DOMContentLoaded', () => {
+  const queryForm = document.querySelector('#form-query');
+  const fileForm = document.querySelector('#form-file');
+  const importForm = document.querySelector('#import-container');
+  const importMenuButton = document.querySelector('#importMenuButton');
+  const checkboxes = document.querySelectorAll('.item-checkbox[data-id="import"]');
 
-// Add event listeners to track changes on checkboxes
-document.querySelectorAll('.item-checkbox').forEach(checkbox => {
-  checkbox.addEventListener('change', getSelectedValues);
-});
+  if (!queryForm || !fileForm || !importForm || !importMenuButton) {
+    console.error('Required elements are missing from the DOM.');
+    return;
+  }
 
+  // Function to reset the visibility of forms
+  function resetForms() {
+    queryForm.classList.add('hidden');
+    fileForm.classList.add('hidden');
+    importForm.classList.add('hidden');
+  }
 
-function modalAction(button, modal) {
-  if (!button || !modal) return;  // Check if button and modal exist
+  // Function to handle the visibility of forms based on checkbox selection
+  function handleCheckboxChange() {
+    let selectedValue = null;
 
-  const openModal = function () {
-    modal.classList.remove('hidden');
-    overlay.classList.remove('hidden');
-  };
+    // Find the first checked checkbox
+    checkboxes.forEach((checkbox) => {
+      if (checkbox.checked) {
+        selectedValue = checkbox.value;
+      }
+    });
 
-  const closeModal = function () {
-    modal.classList.add('hidden');
-    overlay.classList.add('hidden');
-  };
+    console.log('Selected Value:', selectedValue);
 
-  button.addEventListener('click', openModal);
+    resetForms(); // Hide all forms initially
 
-  modal.querySelector('.close-modal').addEventListener('click', closeModal);
-  overlay.addEventListener('click', closeModal);
-  
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-      closeModal();
+    if (selectedValue) {
+      importForm.classList.remove('hidden'); // Always show the container
+
+      if (selectedValue === 'Query') {
+        queryForm.classList.remove('hidden'); // Show Query form
+      } else if (selectedValue === 'Csv') {
+        fileForm.classList.remove('hidden'); // Show CSV form
+      }
+    }
+  }
+
+  // Attach change event listener to all checkboxes
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener('change', handleCheckboxChange);
+  });
+
+  // Optional: Update dropdown button text based on selection
+  $(document).on('change', '.item-checkbox[data-id="import"]', function () {
+    const selectedItems = Array.from(checkboxes)
+      .filter((checkbox) => checkbox.checked)
+      .map((checkbox) => checkbox.value);
+
+    if (selectedItems.length > 0) {
+      importMenuButton.textContent = selectedItems.join(', ');
+    } else {
+      importMenuButton.textContent = 'Metodo de Importação';
     }
   });
-}
+});
