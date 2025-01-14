@@ -10,7 +10,7 @@
         @include('components.dropdownFilter', ['dropdownContent' => $campaigns, 'title' => 'Campanhas', 'id' => 'campaigns', 'isMultiple' => true])
     </div>
     <div class="col">
-        @include('components.dropdownFilter', ['dropdownContent' => ['Loja', 'E-commerce'], 'title' => 'Canal', 'id' => 'types', 'isMultiple' => true])
+        @include('components.dropdownFilter', ['dropdownContent' => ['Site', 'Loja'], 'title' => 'Canal', 'id' => 'types', 'isMultiple' => true])
     </div>
     <div class="col">
         @include('components.dropdownFilter', ['dropdownContent' => ['Query', 'Csv'], 'title' => 'Metodo de Importação', 'id' => 'import', 'isMultiple' => false])
@@ -28,7 +28,7 @@
     
 		<div class="mb-3 w-50 hidden" id="form-file">
 			<label for="formFileLg" class="form-label"></label>
-			<input class="form-control form-control-lg" id="formFileLg" type="file">
+			<input class="form-control form-control-lg" id="formFileLg" name="crmImportFile" type="file">
     </div>
 
     <div>
@@ -39,12 +39,24 @@
 									class="btn btn-primary mb-3"
 									hx-post="/dashboard/dispatchesImport/actions" 
 									hx-target="#preview-results"
-									hx-include="#list-query"
-									hx-vals='{"action": "preview"}'>
+									hx-include="#list-query, #formFileLg"
+									hx-vals='{"action": "preview"}'
+									hx-encoding="multipart/form-data"
+									>
 							Preview da Base
 					</button>
 
-					<button id="send-data-button" type="submit" class="btn btn-primary mb-3">Enviar Lista</button>
+					<button id="send-data"
+									type="button" 
+									class="btn btn-primary mb-3"
+									hx-post="/dashboard/dispatchesImport/actions" 
+									hx-target="#preview-results"
+									hx-include="#campaignsMenuButton, #typesMenuButton, #importMenuButton, #list-query, #formFileLg"
+									hx-vals='{"action": "submit"}'
+									hx-encoding="multipart/form-data"
+									onclick="handleSubmit(event)">
+						Enviar Lista
+					</button>
         </div>
 
     </div>
@@ -59,7 +71,7 @@
             <div id="preview-results">
 							@if (!empty($listPreview))
 									@include('components.dinamicTable', [
-											'title' => 'Preview',
+											'title' => 'Lista Exemplo',
 											'tableData' => $listPreview['data'],
 											'headerData' => $listPreview['columns'],
 											'pageSize' => '20',

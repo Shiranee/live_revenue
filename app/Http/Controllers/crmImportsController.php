@@ -21,7 +21,22 @@ class crmImportsController extends Controller
         $responseCampaigns = $this->dispatchesService->getCampaigns();
         
         $listQuery = "
-            SELECT * FROM crm.customers_active
+					SELECT
+										ca.cpf_cnpj AS cpf
+									,	c.name
+									, CONCAT('55', c.phone) AS telephone
+									, os.cnpj AS store_cnpj
+									, CASE
+													WHEN os.franchising IS NOT NULL THEN 'loja'
+													WHEN ca.preference_channel = 'E-commerce' OR os.cnpj <> '00000000000000' OR ca.channel = 'Multicanal' THEN 'ecommerce'
+										END AS tipo
+
+					FROM crm.customers_active ca
+					LEFT JOIN crm.customers c ON ca.cpf_cnpj = c.cpf_cnpj
+					LEFT JOIN crm.our_stores os ON ca.preference_store_cnpj = os.cnpj AND os.status = 'TRUE' AND os.cnpj <> '00000000000000' AND os.url IS NOT NULL AND os.franchising NOT REGEXP 'Outlet'
+
+					WHERE
+					(os.cnpj IS NOT NULL OR ca.channel IN ('Exclusivo E-commerce', 'Multicanal'))
         ";
 
         $listPreview = $this->dispatchesService->getQueryPreview($listQuery);
@@ -31,23 +46,89 @@ class crmImportsController extends Controller
         return view('utilities.crmImports', compact('campaigns', 'listPreview'));
     }
 
-    public function handleActions(Request $request)
-    {
-        $action = $request->input('action');
-        $listQuery = $request->input('listQuery');
-    
-        if ($action === 'preview' && $listQuery) {
-            $listPreview = $this->dispatchesService->getQueryPreview($listQuery);
-    
-            // Return only the table view for rendering
-            return view('components.dinamicTable', [
-                'title' => 'Preview',
-                'tableData' => $listPreview['data'],
-                'headerData' => $listPreview['columns'],
-                'pageSize' => 20,
-            ]);
-        }
+		public function handleActions(Request $request)
+		{
+			$action = $request->input('action');
+			$listQuery = $request->input('listQuery');
+			$listFile = $request->file('crmImportFile');
+			$action = $request->input('action');
+			$campaign = explode(',', $request->input('campaign'));
+			$channel = explode(',', $request->input('channel'));
+			$query = $request->input('query');
+			$job = $request->input('job');
+	
+			\Log::debug('Request received', [
+				'campaign' => $campaign,
+				'channel' => $channel,
+				'query' => $query,
+				'job' => $job,
+				'file' => $listFile ? $listFile->getClientOriginalName() : 'No file uploaded',
+			]);
 
-        return response()->json(['error' => 'Invalid request'], 400);
-    }
+			switch ($action) {
+				case 'preview':
+						if ($listFile || $listQuery) {
+								$data = $this->handleSourceChoice($listQuery, $listFile);
+
+								return view('components.dinamicTable', [
+										'title' => 'Preview',
+										'tableData' => $data['data'],
+										'headerData' => $data['columns'],
+										'pageSize' => 20,
+								]);
+						} else {
+								return response()->json(['error' => 'No query or file provided'], 400);
+						}
+
+				case 'Submit':
+					$submitDataSource = $listFile 
+					? $this->handleSourceChoice($listQuery, $listFile) 
+					: $listQuery;
+			
+
+				default: return response()->json(['error' => 'Invalid action'], 400);
+			}
+		}
+		private function handleSourceChoice($query, $file)
+		{
+				if (!empty($query)) {
+						$data = $this->dispatchesService->getQueryPreview($query);
+		
+						// Normalize structure for query results
+						return [
+								'data' => $data['data'],
+								'columns' => $data['columns'],
+						];
+				} elseif ($file) {
+						$data = $this->parseUploadedFile($file);
+		
+						// Normalize structure for file results
+						return [
+								'data' => $data['rows'],
+								'columns' => $data['headers'],
+						];
+				}
+		
+				return null; // Handle cases where neither query nor file is provided
+		}
+
+		private function parseUploadedFile($listFile)
+		{
+				$rows = [];
+				$headers = [];
+		
+				if (($handle = fopen($listFile->getRealPath(), 'r')) !== false) {
+						$headers = fgetcsv($handle); // First row as headers
+						while (($data = fgetcsv($handle)) !== false) {
+								$rows[] = array_combine($headers, $data);
+						}
+						fclose($handle);
+				}
+		
+				return [
+						'headers' => $headers,
+						'rows' => $rows,
+				];
+		}
+		
 }

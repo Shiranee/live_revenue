@@ -91,15 +91,18 @@ const gaugeData = [
   }
 ];
 
-document.addEventListener('DOMContentLoaded', () => {
-  const queryForm = document.querySelector('#form-query');
-  const queryText = document.querySelector('#list-query');
-  const fileForm = document.querySelector('#form-file');
-  const fileInput = document.querySelector('#formFileLg');
-  const importForm = document.querySelector('#import-container');
-  const importMenuButton = document.querySelector('#importMenuButton');
-  const checkboxes = document.querySelectorAll('.item-checkbox[data-id="import"]');
+const queryForm = document.querySelector('#form-query');
+const queryText = document.querySelector('#list-query');
+const fileForm = document.querySelector('#form-file');
+const fileInput = document.querySelector('#formFileLg');
+const importForm = document.querySelector('#import-container');
+const importMenuButton = document.querySelector('#importMenuButton');
+const checkboxes = document.querySelectorAll('.item-checkbox[data-id="import"]');
+const campaigns = document.querySelector('#campaignsMenuButton');
+const channels = document.querySelector('#typesMenuButton');
+const sumbmitData = document.querySelector('#send-data');
 
+document.addEventListener('DOMContentLoaded', () => {
   if (!queryForm || !fileForm || !importForm || !importMenuButton) {
     console.error('Required elements are missing from the DOM.');
     return;
@@ -155,3 +158,54 @@ document.addEventListener('DOMContentLoaded', () => {
     checkbox.addEventListener('change', handleCheckboxChange);
   });
 });
+
+function validadeSubmitData() {
+	const campaign = campaigns.textContent.trim();
+	const channel = channels.textContent.trim();
+	const file = fileInput.value.trim();
+	const query = queryText.value.trim();
+	const job = importMenuButton.textContent.trim();
+	let error = false;
+
+	// Check if campaign or channel is invalid
+	if (campaign === 'Campanhas' || channel === 'Canal') {
+		alert('Por favor, selecione uma campanha e um canal válidos.');
+		error = true;
+	}
+
+	// Check if either file or query is empty
+	if (file === '' && (query === '' || !query.toUpperCase().match(/^SELECT[\s\S]*FROM/))) {
+		alert('Por favor, selecione um arquivo ou uma consulta válida.');
+		error = true;
+	}
+
+	return { error, campaign, channel, file, query, job };
+}
+
+function handleSubmit(event) {
+	const { error, campaign, channel, file, query, job } = validadeSubmitData();
+
+	if (error) {
+		// Prevent HTMX from sending the request
+		event.preventDefault();
+		return;
+	} else {
+	const button = event.target;
+	const hxVals = {
+		action: "submit",
+		campaign,
+		channel,
+		file,
+		query,
+		job
+	};
+
+	button.setAttribute("hx-vals", JSON.stringify(hxVals));
+	}
+}
+
+window.handleSubmit = handleSubmit;
+
+// document.addEventListener('DOMContentLoaded', () => {
+// 	sumbmitData.addEventListener('click', validadeSubmitData);
+// });
