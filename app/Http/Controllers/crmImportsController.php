@@ -24,12 +24,12 @@ class crmImportsController extends Controller
 					SELECT
 										ca.cpf_cnpj AS cpf
 									,	c.name
-									, CONCAT('55', c.phone) AS telephone
+									, c.phone AS phone
 									, os.cnpj AS store_cnpj
 									, CASE
 													WHEN os.franchising IS NOT NULL THEN 'loja'
 													WHEN ca.preference_channel = 'E-commerce' OR os.cnpj <> '00000000000000' OR ca.channel = 'Multicanal' THEN 'ecommerce'
-										END AS tipo
+										END AS channel
 
 					FROM crm.customers_active ca
 					LEFT JOIN crm.customers c ON ca.cpf_cnpj = c.cpf_cnpj
@@ -57,38 +57,68 @@ class crmImportsController extends Controller
 			$query = $request->input('query');
 			$job = $request->input('job');
 	
-			\Log::debug('Request received', [
-				'campaign' => $campaign,
-				'channel' => $channel,
-				'query' => $query,
-				'job' => $job,
-				'file' => $listFile ? $listFile->getClientOriginalName() : 'No file uploaded',
-			]);
+			// \Log::debug('Request received', [
+			// 	'campaign' => $campaign,
+			// 	'channel' => $channel,
+			// 	'query' => $query,
+			// 	'job' => $job,
+			// 	// 'file' => json_encode(array_map('addslashes', $this->parseUploadedFile($listFile)['rows']))
+			// ]);
 
 			switch ($action) {
 				case 'preview':
-						if ($listFile || $listQuery) {
-								$data = $this->handleSourceChoice($listQuery, $listFile);
+					if ($listFile || $listQuery) {
+							$data = $this->handleSourceChoice($listQuery, $listFile);
 
-								return view('components.dinamicTable', [
-										'title' => 'Preview',
-										'tableData' => $data['data'],
-										'headerData' => $data['columns'],
-										'pageSize' => 20,
-								]);
-						} else {
-								return response()->json(['error' => 'No query or file provided'], 400);
-						}
+							return view('components.dinamicTable', [
+									'title' => 'Preview',
+									'tableData' => $data['data'],
+									'headerData' => $data['columns'],
+									'pageSize' => 20,
+							]);
+					} else {
+							return response()->json(['error' => 'No query or file provided'], 400);
+					}
 
-				case 'Submit':
-					$submitDataSource = $listFile 
-					? $this->handleSourceChoice($listQuery, $listFile) 
-					: $listQuery;
+				case 'submit':
+					if ($job) {
+							// $query = htmlspecialchars($query, ENT_QUOTES, 'UTF-8');
+							
+							if($listFile != '') {
+								$fileContent = $this->parseUploadedFile($listFile)['rows'];
+								$fileContent = array_map(function ($row) {
+										return is_string($row) ? htmlspecialchars($row, ENT_QUOTES, 'UTF-8') : $row;
+								}, $fileContent);
+							} else {
+								$fileContent = '';
+							}
+							// $campaign = implode(',', $campaign);
+							// $channel = implode(',', $channel);
 			
+							$listData = [
+									'campaign' => $campaign,
+									'channel' => $channel,
+									'job' => $job,
+									'query' => $query,
+									'file' => $fileContent,
+							];
+			
+							// Post the data to the API
+							$response = $this->dispatchesService->postTwillioList($listData);
+			
+							if ($response) {
+									return response()->json($response, 200);
+							} else {
+									return response()->json(['error' => 'Failed to dispatch to Twilio'], 500);
+							}
+					} else {
+							return response()->json(['error' => 'Invalid job'], 400);
+					}
 
 				default: return response()->json(['error' => 'Invalid action'], 400);
 			}
 		}
+
 		private function handleSourceChoice($query, $file)
 		{
 				if (!empty($query)) {
@@ -130,5 +160,4 @@ class crmImportsController extends Controller
 						'rows' => $rows,
 				];
 		}
-		
 }

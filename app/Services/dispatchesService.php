@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 use Exception;
+use Illuminate\Support\Facades\Http;
 
 class dispatchesService 
 {
@@ -105,4 +106,29 @@ class dispatchesService
             throw new Exception("Error retrieving dispatch data: " . $e->getMessage());
         }
     }
+
+		public function postTwillioList($listData)
+		{
+				$url = "http://127.0.0.1:8035/api/twillioDispatch";
+		
+				try {
+						// Convert listData to JSON and post it
+						$response = Http::timeout(1000000)->post($url, [
+							'data' => $listData,
+						]);
+		
+						if ($response->successful()) {
+								return $response->json();
+						} else {
+								// Log the error response
+								logger()->error('Failed to post data', ['response' => $response->body()]);
+								return null;
+						}
+				} catch (\Exception $e) {
+						// Log the exception
+						logger()->error('API Fetch Error: ' . $e->getMessage());
+						return null;
+				}
+		}
+		
 }

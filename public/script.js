@@ -185,10 +185,21 @@ function validadeSubmitData() {
 function handleSubmit(event) {
 	const { error, campaign, channel, file, query, job } = validadeSubmitData();
 
+	console.log(error)
 	if (error) {
-		// Prevent HTMX from sending the request
-		event.preventDefault();
-		return;
+	const button = event.target;
+	const hxVals = {
+		action: "submit",
+		campaign: "",
+		channel: "",
+		file: "",
+		query: "",
+		job: "",
+		error
+	};
+
+	button.setAttribute("hx-vals", JSON.stringify(hxVals));
+
 	} else {
 	const button = event.target;
 	const hxVals = {
@@ -197,7 +208,8 @@ function handleSubmit(event) {
 		channel,
 		file,
 		query,
-		job
+		job,
+		error
 	};
 
 	button.setAttribute("hx-vals", JSON.stringify(hxVals));

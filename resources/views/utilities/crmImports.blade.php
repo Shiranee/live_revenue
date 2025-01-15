@@ -1,4 +1,4 @@
-@include('components.head', ['pageName' => 'Importarção Listas'])
+@include('components.head', ['pageName' => 'Importação Listas'])
 
 <header class="header m-shadow">
 </header>
