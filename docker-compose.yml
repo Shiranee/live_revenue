@@ -2,27 +2,15 @@ version: '3.8'
 
 services:
   app:
+    container_name: laravel
+    image: laravel-app
     build:
       context: .
-      dockerfile: Dockerfile
-    image: laravel-app
-    container_name: laravel_app
-    restart: unless-stopped
-    ports:
-      - "8000:8000"
-    environment:
-      - APP_ENV=${APP_ENV}
-      - APP_KEY=${APP_KEY}
-      - APP_DEBUG=${APP_DEBUG}
-      - APP_URL=${APP_URL}
+      dockerfile: .develop/Dockerfile
     volumes:
-      - .:/var/www/html
-    networks:
-      - laravel_network
-
-networks:
-  laravel_network:
-    driver: bridge
+      - .:/srv/app
+    ports:
+      - 8088:80
 
 # postgres_data volume is removed since it is no longer needed
 

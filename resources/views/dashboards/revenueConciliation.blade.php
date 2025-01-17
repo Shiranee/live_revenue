@@ -44,9 +44,6 @@
 
 	// Assuming $conciliationOverview is passed correctly as a JSON object
 	let data = @json($conciliationOverview);
-	let tableData = @json($conciliationTable);
-
-	console.log(tableData)
 
 	// Prepare the data for the chart
 	const periods = data.map(item => item.period.date); // Extract periods for x-axis
@@ -93,7 +90,6 @@
 
 	const divergencesOptions = echartOptions.optionLine('', values, dates, names, true, '');
 	startChart('day-divergences', divergencesOptions);
-	// callTableData()
 </script>
 
 </html>

@@ -9,6 +9,8 @@ use App\Http\Controllers\crmDispatchesController;
 use App\Http\Controllers\revenueController;
 use App\Http\Controllers\conciliationController;
 use App\Http\Controllers\crmImportsController;
+ini_set('memory_limit', '256M');
+ini_set('max_execution_time', '300');
 
 Route::get('/crm-dispatches/filter', [crmDispatchesController::class, 'crmDispatchesIndex'])->name('crmDispatches.filter');
 

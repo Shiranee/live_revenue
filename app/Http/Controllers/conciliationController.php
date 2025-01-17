@@ -26,22 +26,22 @@ class conciliationController extends Controller
 						
 						// Fetch data from the API
 						$responseOverview = $this->conciliationService->fetchConciliation($startDate, $endDate, 'overview');
-						$responseTable = $this->conciliationService->fetchConciliation($startDate, $endDate, 'table', '?page=1&page_size=1');
+						// $responseTable = $this->conciliationService->fetchConciliation($startDate, $endDate, 'table', '?page=1&page_size=1');
 		
 						// Log the raw responses
 						Log::debug('Overview Response:', ['response' => $responseOverview]);
-						Log::debug('Table Response:', ['response' => $responseTable]);
+						// Log::debug('Table Response:', ['response' => $responseTable]);
 		
 						// Extract the "data" array from responses
 						$conciliationOverview = $responseOverview['data'] ?? [];
 						
-						$conciliationTable = $responseTable['data'] ?? [];
-						$conciliationTableNames = [];
-						if (!empty($conciliationTable)) {
-								$conciliationTableNames = array_keys((array) $conciliationTable[0]); // First row contains the column names
-						}
+						// $conciliationTable = $responseTable['data'] ?? [];
+						// $conciliationTableNames = [];
+						// if (!empty($conciliationTable)) {
+						// 		$conciliationTableNames = array_keys((array) $conciliationTable[0]); // First row contains the column names
+						// }
 		
-						return view('dashboards.revenueConciliation', compact('conciliationOverview', 'conciliationTable', 'conciliationTableNames'));
+						return view('dashboards.revenueConciliation', compact('conciliationOverview'));
 		
 				} catch (\Exception $e) {
 						Log::error("Error fetching dispatch data: " . $e->getMessage());
