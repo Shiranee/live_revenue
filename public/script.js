@@ -103,60 +103,62 @@ const channels = document.querySelector('#typesMenuButton');
 const sumbmitData = document.querySelector('#send-data');
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (!queryForm || !fileForm || !importForm || !importMenuButton) {
-    console.error('Required elements are missing from the DOM.');
-    return;
-  }
 
-  // Function to reset the visibility of forms
-  function resetForms() {
-    queryForm.classList.add('hidden');
-    fileForm.classList.add('hidden');
-    importForm.classList.add('hidden');
-  }
+		if (!queryForm || !fileForm || !importForm || !importMenuButton) {
+			console.error('Required elements are missing from the DOM.');
+			return;
+		}
 
-  // Function to handle the visibility of forms based on checkbox selection
-  function handleCheckboxChange(event) {
-    // Uncheck all other checkboxes in the group
-    checkboxes.forEach((checkbox) => {
-      if (checkbox !== event.target) {
-        checkbox.checked = false;
-      }
-    });
+		// Function to reset the visibility of forms
+		function resetForms() {
+			queryForm.classList.add('hidden');
+			fileForm.classList.add('hidden');
+			importForm.classList.add('hidden');
+		}
 
-    let selectedValue = null;
+		// Function to handle the visibility of forms based on checkbox selection
+		function handleCheckboxChange(event) {
+			// Uncheck all other checkboxes in the group
+			checkboxes.forEach((checkbox) => {
+				if (checkbox !== event.target) {
+					checkbox.checked = false;
+				}
+			});
 
-    // Find the first checked checkbox
-    checkboxes.forEach((checkbox) => {
-      if (checkbox.checked) {
-        selectedValue = checkbox.value;
-      }
-    });
+			let selectedValue = null;
 
-    console.log('Selected Value:', selectedValue);
+			// Find the first checked checkbox
+			checkboxes.forEach((checkbox) => {
+				if (checkbox.checked) {
+					selectedValue = checkbox.value;
+				}
+			});
 
-    resetForms(); // Hide all forms initially
+			console.log('Selected Value:', selectedValue);
 
-    if (selectedValue) {
-      importForm.classList.remove('hidden'); // Always show the container
+			resetForms(); // Hide all forms initially
 
-      if (selectedValue === 'Query') {
-        queryForm.classList.remove('hidden'); // Show Query form
-        fileInput.value = ''; // Clear file input
-      } else if (selectedValue === 'Csv') {
-        fileForm.classList.remove('hidden'); // Show CSV form
-        queryText.value = ''; // Clear query text
-      }
-    }
+			if (selectedValue) {
+				importForm.classList.remove('hidden'); // Always show the container
 
-    // Update the dropdown button text
-    importMenuButton.textContent = selectedValue || 'Metodo de Importação';
-  }
+				if (selectedValue === 'Query') {
+					queryForm.classList.remove('hidden'); // Show Query form
+					fileInput.value = ''; // Clear file input
+				} else if (selectedValue === 'Csv') {
+					fileForm.classList.remove('hidden'); // Show CSV form
+					queryText.value = ''; // Clear query text
+				}
+			}
 
-  // Attach change event listener to all checkboxes
-  checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener('change', handleCheckboxChange);
-  });
+			// Update the dropdown button text
+			importMenuButton.textContent = selectedValue || 'Metodo de Importação';
+		}
+
+		// Attach change event listener to all checkboxes
+		checkboxes.forEach((checkbox) => {
+			checkbox.addEventListener('change', handleCheckboxChange);
+		});
+	
 });
 
 function validadeSubmitData() {

@@ -18,37 +18,35 @@ class conciliationController extends Controller
         $this->conciliationService = $conciliationService;
     }
 
-    public function conciliationIndex(Request $request)
-    {
-        try {
-            $startDate = $request->get('startDate', now()->startOfMonth()->toDateString());
-            $endDate = $request->get('endDate', now()->toDateString());
-            
-            $responseConciliation = $this->conciliationService->fetchConciliation($startDate, $endDate, 'overview');
-
-            // Extract the "data" array
-            $conciliationData = $responseConciliation['data'] ?? [];
-
-            // dd($conciliationData);
-
-            // // Handle AJAX request
-            // if ($request->ajax()) {
-            //     // Return the view with updated data for AJAX requests
-            //     // return response()->view('dashboards.crmDispatches', compact('campaigns', 'totalCampaigns', 'totalDispatches'));
-            //     $html = '';
-            //     foreach ($totalDispatches as $dispatchesData) {
-            //         $html .= view('components.cardDispatches', compact('dispatchesData'))->render();
-            //     }
-            
-            //     return response()->json($html);
-            // }
-
-            // Return the full page view for non-AJAX requests
-            return view('dashboards.revenueConciliation', compact('conciliationData'));
-
-        } catch (\Exception $e) {
-            logger()->error("Error fetching dispatch data: " . $e->getMessage());
-            return back()->withErrors(['error' => 'Failed to load dispatch data: ' . $e->getMessage()]);
-        }
-    }
+		public function conciliationIndex(Request $request)
+		{
+				try {
+						$startDate = $request->get('startDate', now()->startOfMonth()->toDateString());
+						$endDate = $request->get('endDate', now()->toDateString());
+						
+						// Fetch data from the API
+						$responseOverview = $this->conciliationService->fetchConciliation($startDate, $endDate, 'overview');
+						$responseTable = $this->conciliationService->fetchConciliation($startDate, $endDate, 'table', '?page=1&page_size=1');
+		
+						// Log the raw responses
+						Log::debug('Overview Response:', ['response' => $responseOverview]);
+						Log::debug('Table Response:', ['response' => $responseTable]);
+		
+						// Extract the "data" array from responses
+						$conciliationOverview = $responseOverview['data'] ?? [];
+						
+						$conciliationTable = $responseTable['data'] ?? [];
+						$conciliationTableNames = [];
+						if (!empty($conciliationTable)) {
+								$conciliationTableNames = array_keys((array) $conciliationTable[0]); // First row contains the column names
+						}
+		
+						return view('dashboards.revenueConciliation', compact('conciliationOverview', 'conciliationTable', 'conciliationTableNames'));
+		
+				} catch (\Exception $e) {
+						Log::error("Error fetching dispatch data: " . $e->getMessage());
+						return back()->withErrors(['error' => 'Failed to load dispatch data: ' . $e->getMessage()]);
+				}
+		}
+		
 }

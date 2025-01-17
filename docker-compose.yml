@@ -11,35 +11,12 @@ services:
     ports:
       - "8000:8000"
     environment:
-      APP_ENV: local
-      APP_KEY: base64:your-app-key
-      APP_DEBUG: "true"
-      APP_URL: http://localhost
-      DB_CONNECTION: pgsql
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_DATABASE: your_database_name
-      DB_USERNAME: your_username
-      DB_PASSWORD: your_password
+      - APP_ENV=${APP_ENV}
+      - APP_KEY=${APP_KEY}
+      - APP_DEBUG=${APP_DEBUG}
+      - APP_URL=${APP_URL}
     volumes:
       - .:/var/www/html
-    networks:
-      - laravel_network
-    depends_on:
-      - postgres
-
-  postgres:
-    image: postgres:15
-    container_name: postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: public
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: 12345678
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
     networks:
       - laravel_network
 
@@ -47,8 +24,7 @@ networks:
   laravel_network:
     driver: bridge
 
-volumes:
-  postgres_data:
+# postgres_data volume is removed since it is no longer needed
 
 # docker-compose build
 # docker-compose up

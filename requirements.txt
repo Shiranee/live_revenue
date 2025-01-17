@@ -1,0 +1,14 @@
+git
+curl
+libpq-dev
+libxml2-dev
+libzip-dev
+libpng-dev
+libjpeg-dev
+libfreetype6-dev
+libonig-dev
+libgmp-dev
+libicu-dev
+libssl-dev
+unzip
+zip

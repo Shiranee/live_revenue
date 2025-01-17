@@ -1,34 +1,39 @@
-# Use the PHP image with extensions for Laravel
-FROM php:8.2-fpm
+ARG PHP_VERSION=${PHP_VERSION:-8.2}
+FROM php:${PHP_VERSION}-fpm-alpine AS php-system-setup
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpq-dev \
-    unzip \
-    zip
+RUN apk add --no-cache dcron busybox-suid libcap curl zip unzip git mariadb-client
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+RUN install-php-extensions intl bcmath mbstring gd pdo_mysql pdo_pgsql opcache redis uuid exif pcntl zip sockets mysqli
 
-# Install Composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+# Install supervisord implementation
+COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/local/bin/supervisord
+
+# Install caddy
+COPY --from=caddy:2.2.1 /usr/bin/caddy /usr/local/bin/caddy
+RUN setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
+
+# Install composer
+COPY --from=composer/composer:2 /usr/bin/composer /usr/local/bin/composer
+
+FROM php-system-setup AS app-setup
 
 # Set working directory
-WORKDIR /var/www/html
+ENV LARAVEL_PATH=/srv/app
+WORKDIR $LARAVEL_PATH
 
-# Copy Laravel app
-COPY . .
+# Copy
+COPY config/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
-# Install Laravel dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Adjust permissions
+RUN chown -R www-data:www-data $LARAVEL_PATH
+RUN chmod -R 775 $LARAVEL_PATH
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html
+# Start app
+EXPOSE 80
+COPY entrypoint.sh /
+RUN chmod +x /entrypoint.sh
 
-# Expose port
-EXPOSE 8000
-
-# Start PHP-FPM
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]

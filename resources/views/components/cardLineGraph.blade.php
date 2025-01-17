@@ -1,4 +1,4 @@
-<div class="row mb-3">
+<div class="row mb-3 {{ $classes[0] ? $classes[0] : '' }}">
     
     <div class="">
 
@@ -12,7 +12,7 @@
                 </div>
             </div>
 
-            <div class="revenue-dashboard" id="{{ $id }}"></div>
+            <div class="my-chart {{ $classes[1] ? $classes[1] : '' }}" id="{{ $id }}"></div>
             
         </div>
     

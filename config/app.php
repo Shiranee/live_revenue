@@ -105,6 +105,8 @@ return [
         ),
     ],
 
+		'flask_url' => env('FLASK_URL', 'http://localhost'),
+
     /*
     |--------------------------------------------------------------------------
     | Maintenance Mode Driver

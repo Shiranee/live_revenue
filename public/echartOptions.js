@@ -1,4 +1,4 @@
-export function optionLine(title, seriesData, xAxisData, showLegends, formatter) {
+export function optionLine(title, seriesData, xAxisData, seriesName, showLegends, formatter) {
   let optionLabels = {
     type: 'line',
     lineStyle: {
@@ -23,6 +23,13 @@ export function optionLine(title, seriesData, xAxisData, showLegends, formatter)
     }
   };
 
+  // Generate series data for multiple series
+  let series = seriesData.map((data, index) => ({
+    name: `${seriesName[index]}`,
+    data: data,
+    ...optionLabels
+  }));
+
   let option = {
     title: {
       text: title,
@@ -44,7 +51,7 @@ export function optionLine(title, seriesData, xAxisData, showLegends, formatter)
       }
     },
     legend: {
-      data: []
+      data: series.map(s => s.name) // Dynamic legends
     },
     grid: {
       left: '1%',
@@ -55,7 +62,7 @@ export function optionLine(title, seriesData, xAxisData, showLegends, formatter)
     xAxis: {
       type: 'category',
       boundaryGap: ['10%', '10%'],
-      data: xAxisData,
+      data: xAxisData, // Pass xAxisData dynamically
       show: showLegends,
       axisLine: {
         lineStyle: {
@@ -77,13 +84,7 @@ export function optionLine(title, seriesData, xAxisData, showLegends, formatter)
         show: false
       }
     },
-    series: [
-      {
-        name: 'Your Series Name',
-        data: seriesData,
-        ...optionLabels
-      }
-    ]
+    series: series // Assign generated series
   };
 
   return option;

@@ -83,6 +83,11 @@ body {
     width: 96%;
 }
 
+.conciliation-dashboard {
+	height: 40vh;
+	width: 100%
+}
+
 .dashboard-fit {
     height: 100%;
     width: 96%;
@@ -119,6 +124,10 @@ body {
 
 .h-5 {
     height: 50px;
+}
+
+.h-300 {
+	height: 300px;
 }
 
 .datepicker-dropdown {

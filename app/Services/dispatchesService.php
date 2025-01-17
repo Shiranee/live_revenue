@@ -109,7 +109,7 @@ class dispatchesService
 
 		public function postTwillioList($listData)
 		{
-				$url = "http://127.0.0.1:8035/api/twillioDispatch";
+				$url = "http://localhost:8035/api/twillioDispatch";
 		
 				try {
 						// Convert listData to JSON and post it
